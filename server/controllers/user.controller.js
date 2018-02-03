@@ -1,12 +1,63 @@
 import Joi from 'joi';
+import SpotifyWebApi from 'spotify-web-api-node';
 import paramValidation from '../../config/param-validation';
+import config from '../../config/config';
 import APIError from '../helpers/APIError';
 
-function authUrl(req, res, next) {
-  res.json({url: 'http://spotify.com'})
+const state = '';
+const scopes = ['user-read-private', 'user-read-email', 'playlist-read-private', 'user-library-read', 'playlist-modify-private', 'playlist-modify-public'];
+
+const spotifyApi = new SpotifyWebApi({
+  redirectUri : config.spotify.redirectUri,
+  clientId : config.spotify.clientId,
+  clientSecret: config.spotify.clientSecret
+})
+
+function getAccessToken(code) { 
+  spotifyApi.authorizationCodeGrant(code)
+  .then(function(data) {
+    //console.log('The token expires in ' + data.body['expires_in']);
+    //console.log('The access token is ' + data.body['access_token']);
+    //console.log('The refresh token is ' + data.body['refresh_token']);
+    storeTokens(data.body['access_token'], data.body['refresh_token']);
+      // Set the access token on the API object to use it in later calls
+      spotifyApi.setAccessToken(data.body['access_token']);
+      spotifyApi.setRefreshToken(data.body['refresh_token']);
+    }, function(err) {
+      console.log('Something went wrong!', err);
+    });
 }
 
-export default { authUrl };
+function authUrl(req, res, next) {
+  const authUrl = spotifyApi.createAuthorizeURL(scopes, state);
+  res.json({authUrl: authUrl})
+}
+
+function getAccessCode(req, res, next) {
+  // save and associate the user to the access code
+  // want to be able to cron the playlist checking, 
+  // refreshing the token. Send user an email if they need
+  // to reauthorize the app. Use token to get user's
+  // playlist info for analysis. "These other people
+  // added the same song as you!" etc.
+  //spotifyApi.setAccessToken(data.body['access_token']);
+  //spotifyApi.setRefreshToken(data.body['refresh_token']);
+  spotifyApi.authorizationCodeGrant(req.body.accessCode)
+    .then(function(data) {
+      console.log(data.body.access_token)
+      console.log(data.body.refresh_token)
+      //storeTokens(data.body['access_token'], data.body['refresh_token']);
+      //spotifyApi.setAccessToken(data.body['access_token']);
+      //spotifyApi.setRefreshToken(data.body['refresh_token']);
+      res.json({result: 'success'})
+    })
+    .catch(err => {
+      console.log('ERROR:', err)
+      res.json({result: err})
+    })
+}
+
+export default { authUrl, getAccessCode };
 /*
 var fs = require('fs');
 
@@ -85,39 +136,6 @@ function refreshToken(callback) {
     });
 }
 
-function getAuthUrl() {
-  redirectUri = credentials.redirectUri,
-  clientId = credentials.clientId,
-  state = '',
-  scopes = ['user-read-private', 'user-read-email', 'playlist-read-private', 'user-library-read', 'playlist-modify-private', 'playlist-modify-public'];
-
-  var spotifyApi = new SpotifyWebApi({
-    redirectUri : redirectUri,
-    clientId : clientId
-  });
-
-  var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
-  //console.log(authorizeURL);
-  return authorizeURL;
-}
-
-
-function getAccessToken(code) { 
-
-  // Retrieve an access token and a refresh token
-  spotifyApi.authorizationCodeGrant(code)
-  .then(function(data) {
-    //console.log('The token expires in ' + data.body['expires_in']);
-    //console.log('The access token is ' + data.body['access_token']);
-    //console.log('The refresh token is ' + data.body['refresh_token']);
-    storeTokens(data.body['access_token'], data.body['refresh_token']);
-      // Set the access token on the API object to use it in later calls
-      spotifyApi.setAccessToken(data.body['access_token']);
-      spotifyApi.setRefreshToken(data.body['refresh_token']);
-    }, function(err) {
-      console.log('Something went wrong!', err);
-    });
-}
 
 function getMySavedTracks() {
   spotifyApi.getMySavedTracks().then(function(data) {

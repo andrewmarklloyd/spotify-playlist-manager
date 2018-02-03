@@ -7,4 +7,7 @@ const router = express.Router();
 router.route('/auth-url')
   .get(controller.authUrl);
 
+router.route('/code')
+  .post(controller.getAccessCode);
+
 export default router;

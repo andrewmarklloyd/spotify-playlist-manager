@@ -74,6 +74,7 @@
     "raccoon": "0.2.8",
     "redis": "^2.8.0",
     "run-sequence": "2.1.0",
+    "spotify-web-api-node": "^2.5.0",
     "supertest": "3.0.0",
     "supertest-as-promised": "4.0.2",
     "swagger-jsdoc": "^1.9.7",

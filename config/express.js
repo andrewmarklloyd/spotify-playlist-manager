@@ -19,6 +19,8 @@ const app = express();
 
 if (config.env === 'development') {
   app.use(logger('dev'));
+  // enable CORS - Cross Origin Resource Sharing
+  app.use(cors());
 }
 
 // parse body params and attache them to req.body
@@ -31,9 +33,6 @@ app.use(methodOverride());
 
 // secure apps by setting various HTTP headers
 app.use(helmet());
-
-// enable CORS - Cross Origin Resource Sharing
-app.use(cors());
 
 // enable detailed API logging in dev env
 if (config.env === 'development') {
