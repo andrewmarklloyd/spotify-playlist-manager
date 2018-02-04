@@ -29,13 +29,7 @@ export class AuthService {
 		})
   }
 
-  registerUser(email, password) {
-		return new Promise((resolve, reject) => {
-			this.http.post(`${environment.apiDomain}api/user/register`, {email, password})
-				.toPromise()
-				.then(res => {
-					resolve(res.json())
-				})
-		})
+  registerUser(model) {
+		return this.http.post(`${environment.apiDomain}api/user/register`, {email: model.email, password: model.password})
   }
 }

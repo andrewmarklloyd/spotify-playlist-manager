@@ -57,7 +57,16 @@ function getAccessCode(req, res, next) {
     })
 }
 
-export default { authUrl, getAccessCode };
+function registerUser(req, res) {
+  console.log('registering user')
+  res.json({result: 'success'})
+}
+
+function loginUser(req, res) {
+
+}
+
+export default { authUrl, getAccessCode, registerUser, loginUser };
 /*
 var fs = require('fs');
 

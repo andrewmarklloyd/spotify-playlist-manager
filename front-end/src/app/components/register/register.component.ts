@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -10,17 +11,26 @@ export class RegisterComponent implements OnInit {
 	model: any = {};
   loading: any;
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+  					  private authService: AuthService) {
+  	//https://github.com/cornflourblue/angular2-registration-login-example-cli/blob/master/src/app/register/register.component.ts
 
   }
 
   ngOnInit() {
+
   }
 
   register() {
 	  this.loading = true;
-	  console.log(this.model)
-	  console.log('hello')
+	  this.authService.registerUser(this.model)
+	  	.subscribe(
+	  		data => {
+	  			this.router.navigate(['/login']);
+	  		},
+	  		error => {
+	  			console.log(error)
+	  			this.loading = false;
+	  		});
 	}
-
 }
