@@ -63,7 +63,8 @@ function registerUser(req, res) {
 }
 
 function loginUser(req, res) {
-
+  console.log('logging in user')
+  res.json({result: 'success'})
 }
 
 export default { authUrl, getAccessCode, registerUser, loginUser };

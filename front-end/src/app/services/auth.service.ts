@@ -32,4 +32,8 @@ export class AuthService {
   registerUser(model) {
 		return this.http.post(`${environment.apiDomain}api/user/register`, {email: model.email, password: model.password})
   }
+
+  loginUser(email, password) {
+		return this.http.post(`${environment.apiDomain}api/user/login`, {email, password})
+  }
 }
