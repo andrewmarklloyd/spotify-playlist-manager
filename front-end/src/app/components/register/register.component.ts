@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -6,10 +7,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+	model: any = {};
+  loading: any;
 
-  constructor() { }
+  constructor(private router: Router) {
+
+  }
 
   ngOnInit() {
   }
+
+  register() {
+	  this.loading = true;
+	  console.log(this.model)
+	  console.log('hello')
+	}
 
 }

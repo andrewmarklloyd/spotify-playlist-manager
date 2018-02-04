@@ -28,4 +28,14 @@ export class AuthService {
 				})
 		})
   }
+
+  registerUser(email, password) {
+		return new Promise((resolve, reject) => {
+			this.http.post(`${environment.apiDomain}api/user/register`, {email, password})
+				.toPromise()
+				.then(res => {
+					resolve(res.json())
+				})
+		})
+  }
 }
