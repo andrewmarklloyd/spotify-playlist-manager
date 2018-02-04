@@ -17,11 +17,15 @@ const envVarsSchema = Joi.object({
   MONGO_PORT: Joi.number()
     .default(27017),
   SPOTIFY_CLIENT_ID: Joi.string().required()
-    .description('JWT Secret required to sign'),
+    .description('Spotify client Id required'),
   SPOTIFY_CLIENT_SECRET: Joi.string().required()
-    .description('JWT Secret required to sign'),
-  SPOTIFY_REDIRECT_URI: Joi.string().required()
-    .description('JWT Secret required to sign')
+    .description('Spotify client secret required'),
+  SPOTIFY_REDIRECT_URI: Joi.string()
+    .when('NODE_ENV', {
+      is: Joi.string().equal('development'),
+      then: Joi.string().default('http://localhost:4200/'),
+      otherwise: Joi.string().default('http://localhost:3000')
+    }),
 }).unknown()
   .required();
 

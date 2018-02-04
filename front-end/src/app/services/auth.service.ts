@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
@@ -10,7 +11,7 @@ export class AuthService {
 
   getAuthUrl() {
 		return new Promise((resolve, reject) => {
-			this.http.get('http://localhost:3000/api/user/auth-url')
+			this.http.get(`${environment.apiDomain}api/user/auth-url`)
 				.toPromise()
 				.then(res => {
 					resolve(res.json().authUrl)
@@ -20,7 +21,7 @@ export class AuthService {
 
   submitAccessCode(accessCode) {
 		return new Promise((resolve, reject) => {
-			this.http.post('http://localhost:3000/api/user/code', {accessCode: accessCode})
+			this.http.post(`${environment.apiDomain}api/user/code`, {accessCode: accessCode})
 				.toPromise()
 				.then(res => {
 					resolve(res.json())
