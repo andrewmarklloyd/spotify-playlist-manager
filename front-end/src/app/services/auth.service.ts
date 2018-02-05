@@ -8,18 +8,11 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class AuthService {
 
-	auth0 = new auth0.WebAuth({
-    clientID: '20q4K0qOtDnSdZImAk8mdJgVz64nSDvr',
-    domain: 'spotify-playlists.auth0.com',
-    responseType: 'token id_token',
-    audience: 'https://spotify-playlists.auth0.com/userinfo',
-    redirectUri: 'http://localhost:4200/callback/',
-    scope: 'openid'
-  });
+	auth0: auth0.WebAuth;
 
   constructor(private http: Http,
   						public router: Router) {
-
+    this.auth0 = new auth0.WebAuth(environment.auth0Config);
   }
 
   getAuthUrl() {
@@ -47,7 +40,6 @@ export class AuthService {
   }
 
   public handleAuthentication(): void {
-  	console.log('handle authentication')
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';

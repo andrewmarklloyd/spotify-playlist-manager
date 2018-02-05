@@ -10,10 +10,4 @@ router.route('/auth-url')
 router.route('/code')
   .post(controller.getAccessCode);
 
-router.route('/register')
-  .post(controller.registerUser);
-
-router.route('/login')
-  .post(controller.loginUser);
-
 export default router;

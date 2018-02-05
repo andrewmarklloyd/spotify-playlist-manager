@@ -5,5 +5,13 @@
 
 export const environment = {
   production: false,
-  apiDomain: 'http://localhost:3000/'
+  apiDomain: 'http://localhost:3000/',
+  auth0Config: {
+		clientID: '20q4K0qOtDnSdZImAk8mdJgVz64nSDvr',
+		domain: 'spotify-playlists.auth0.com',
+		responseType: 'token id_token',
+		audience: 'https://spotify-playlists.auth0.com/userinfo',
+		redirectUri: 'http://localhost:4200/callback/',
+		scope: 'openid'
+  }
 };
