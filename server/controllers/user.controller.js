@@ -53,10 +53,12 @@ function getAccessCode(req, res, next) {
       //spotifyApi.setAccessToken(data.body['access_token']);
       //spotifyApi.setRefreshToken(data.body['refresh_token']);
       spotifyApi.setAccessToken(response.body.access_token)
-      spotifyApi.getUserPlaylists()
-        .then(d => {
-          res.json({result: d})
-        })
+      spotifyApi.setRefreshToken(response.body.refresh_token)
+      spotifyApi.getMySavedTracks().then(function(data) {
+        res.json({result: data})
+      }, function(err) {
+        res.json(err)
+      });
     })
     .catch(err => {
       console.log('ERROR:', err)
