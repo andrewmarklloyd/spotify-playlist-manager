@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,17 +9,17 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-	private window: any;
+  private window: any;
 
   constructor(private authService: AuthService,
+              private router: Router,
               private route: ActivatedRoute) {
-  	this.window = window;
+    this.window = window;
   }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params.code) {
-        console.log(params.code)
         this.authService.submitAccessCode(params.code)
           .then(response => {
             console.log(response)
@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   getAuthUrl() {
   	this.authService.getAuthUrl()
   		.then(authUrl => {
-  			this.window.location.href = authUrl;
+        this.window.location.href = authUrl;
   		})
   }
 

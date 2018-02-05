@@ -1,1 +1,1 @@
-<button (click)="getAuthUrl()">Authorize</button>
+<button *ngIf="authService.isAuthenticated()" (click)="getAuthUrl()">Authorize Spotify API</button>

@@ -82,7 +82,6 @@ export class AuthService {
     // access token's expiry time
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     const authenticated = new Date().getTime() < expiresAt;
-    console.log('user authenticated:', authenticated)
     return authenticated;
   }
 }
