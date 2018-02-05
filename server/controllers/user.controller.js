@@ -47,13 +47,16 @@ function getAccessCode(req, res, next) {
   //spotifyApi.setAccessToken(data.body['access_token']);
   //spotifyApi.setRefreshToken(data.body['refresh_token']);
   spotifyApi.authorizationCodeGrant(req.body.accessCode)
-    .then(function(data) {
-      console.log(req.body)
-      storeUserToken(req.body.userId, req.body.accessToken);
+    .then(function(response) {
+      storeUserToken(req.body.userId, response.body.access_token);
       //storeTokens(data.body['access_token'], data.body['refresh_token']);
       //spotifyApi.setAccessToken(data.body['access_token']);
       //spotifyApi.setRefreshToken(data.body['refresh_token']);
-      res.json({result: 'success'})
+      spotifyApi.setAccessToken(response.body.access_token)
+      spotifyApi.getUserPlaylists()
+        .then(d => {
+          res.json({result: d})
+        })
     })
     .catch(err => {
       console.log('ERROR:', err)
@@ -205,8 +208,7 @@ function checkAndAddTracks(userId, playlistId) {
             });
           });
           promises.push(promise);
-        }
-        Promise.all(promises).then(values => {
+        } Promise.all(promises).then(values => {
           values.forEach(function(item) {
             botTracks = botTracks.concat(item);
           });
