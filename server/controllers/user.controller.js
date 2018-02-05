@@ -4,6 +4,10 @@ import paramValidation from '../../config/param-validation';
 import config from '../../config/config';
 import APIError from '../helpers/APIError';
 
+const userToSpotifyAccessTokenMap = {
+
+}
+
 const state = '';
 const scopes = ['user-read-private', 'user-read-email', 'playlist-read-private', 'user-library-read', 'playlist-modify-private', 'playlist-modify-public'];
 
@@ -44,8 +48,8 @@ function getAccessCode(req, res, next) {
   //spotifyApi.setRefreshToken(data.body['refresh_token']);
   spotifyApi.authorizationCodeGrant(req.body.accessCode)
     .then(function(data) {
-      console.log(data.body.access_token)
-      console.log(data.body.refresh_token)
+      console.log(req.body)
+      storeUserToken(req.body.userId, req.body.accessToken);
       //storeTokens(data.body['access_token'], data.body['refresh_token']);
       //spotifyApi.setAccessToken(data.body['access_token']);
       //spotifyApi.setRefreshToken(data.body['refresh_token']);
@@ -55,6 +59,12 @@ function getAccessCode(req, res, next) {
       console.log('ERROR:', err)
       res.json({result: err})
     })
+}
+
+function storeUserToken(userId, accessToken) {
+  userToSpotifyAccessTokenMap[userId] = {};
+  userToSpotifyAccessTokenMap[userId].accessToken = accessToken;
+  console.log(userToSpotifyAccessTokenMap)
 }
 
 export default { authUrl, getAccessCode };

@@ -25,9 +25,9 @@ export class AuthService {
 		})
   }
 
-  submitAccessCode(accessCode) {
+  submitAccessCode(userId, accessCode) {
 		return new Promise((resolve, reject) => {
-			this.http.post(`${environment.apiDomain}api/user/code`, {accessCode: accessCode})
+			this.http.post(`${environment.apiDomain}api/user/code`, {userId, accessCode})
 				.toPromise()
 				.then(res => {
 					resolve(res.json())
@@ -44,20 +44,29 @@ export class AuthService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
         this.setSession(authResult);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
       } else if (err) {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
         console.log(err);
       }
     });
   }
 
-  private setSession(authResult): void {
+  private setSession(authResult): void {  
     // Set the time that the access token will expire at
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
+    const userId = 'andrew.lloyd';
+    localStorage.setItem('userId', userId);
+  }
+
+  private getSession(): void {
+    const userSession = {
+      access_token: localStorage.getItem('access_token'),
+      id_token: localStorage.getItem('id_token')
+    };
   }
 
   public logout(): void {
@@ -65,6 +74,7 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+    localStorage.removeItem('userId');
     // Go back to the home route
     this.router.navigate(['/']);
   }
