@@ -6,21 +6,17 @@ import { FormsModule }   from '@angular/forms';
 
 // Components
 import { AppComponent } from './app.component';
-import { RegisterComponent } from './components/register/register.component';
 
 // Services
 import { AuthService } from './services/auth.service';
-import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
-
-
+import { CallbackComponent } from './components/callback/callback.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RegisterComponent,
-    LoginComponent,
-    HomeComponent
+    HomeComponent,
+    CallbackComponent
   ],
   imports: [
     BrowserModule,
