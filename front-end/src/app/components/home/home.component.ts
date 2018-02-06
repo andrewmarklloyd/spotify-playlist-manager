@@ -20,9 +20,15 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params.code) {
-        this.authService.submitAccessCode(localStorage.getItem('userId'), params.code)
-          .then(response => {
-            console.log(response)
+        this.authService.getUserInfo()
+          .then((userInfo) => {
+            return this.authService.submitAccessCode(userInfo['name'], params.code)
+          })
+          .then(result => {
+            console.log(result)
+          })
+          .catch(err => {
+            console.log(err)
           })
       }
     })

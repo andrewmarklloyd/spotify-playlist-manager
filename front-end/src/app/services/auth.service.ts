@@ -25,9 +25,22 @@ export class AuthService {
 		})
   }
 
-  submitAccessCode(userId, accessCode) {
+  getUserInfo() {
+    return new Promise((resolve, reject) => {
+      this.auth0.client.userInfo(localStorage.getItem('access_token'), function(err, userInfo) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(userInfo)
+        }
+      });  
+    })
+  }
+
+  submitAccessCode(userId, spotifyAccessCode) {
+    console.log(userId, spotifyAccessCode)
 		return new Promise((resolve, reject) => {
-			this.http.post(`${environment.apiDomain}api/user/code`, {userId, accessCode})
+			this.http.post(`${environment.apiDomain}api/user/code`, {userId, spotifyAccessCode})
 				.toPromise()
 				.then(res => {
 					resolve(res.json())
@@ -58,8 +71,6 @@ export class AuthService {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
-    const userId = 'andrew.lloyd';
-    localStorage.setItem('userId', userId);
   }
 
   private getSession(): void {

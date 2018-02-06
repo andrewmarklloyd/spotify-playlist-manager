@@ -17,21 +17,6 @@ const spotifyApi = new SpotifyWebApi({
   clientSecret: config.spotify.clientSecret
 })
 
-function getAccessToken(code) { 
-  spotifyApi.authorizationCodeGrant(code)
-  .then(function(data) {
-    //console.log('The token expires in ' + data.body['expires_in']);
-    //console.log('The access token is ' + data.body['access_token']);
-    //console.log('The refresh token is ' + data.body['refresh_token']);
-    storeTokens(data.body['access_token'], data.body['refresh_token']);
-      // Set the access token on the API object to use it in later calls
-      spotifyApi.setAccessToken(data.body['access_token']);
-      spotifyApi.setRefreshToken(data.body['refresh_token']);
-    }, function(err) {
-      console.log('Something went wrong!', err);
-    });
-}
-
 function authUrl(req, res, next) {
   const authUrl = spotifyApi.createAuthorizeURL(scopes, state);
   res.json({authUrl: authUrl})
@@ -46,7 +31,7 @@ function getAccessCode(req, res, next) {
   // added the same song as you!" etc.
   //spotifyApi.setAccessToken(data.body['access_token']);
   //spotifyApi.setRefreshToken(data.body['refresh_token']);
-  spotifyApi.authorizationCodeGrant(req.body.accessCode)
+  spotifyApi.authorizationCodeGrant(req.body.spotifyAccessCode)
     .then(function(response) {
       storeUserToken(req.body.userId, response.body.access_token);
       //storeTokens(data.body['access_token'], data.body['refresh_token']);
