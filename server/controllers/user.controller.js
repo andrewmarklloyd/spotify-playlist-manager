@@ -3,10 +3,9 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import paramValidation from '../../config/param-validation';
 import config from '../../config/config';
 import APIError from '../helpers/APIError';
+import RedisInterface from '../helpers/RedisInterface';
 
-const userToSpotifyAccessTokenMap = {
-
-}
+const redisInterface = new RedisInterface();
 
 const state = '';
 const scopes = ['user-read-private', 'user-read-email', 'playlist-read-private', 'user-library-read', 'playlist-modify-private', 'playlist-modify-public'];
@@ -33,43 +32,25 @@ function getAccessCode(req, res, next) {
   //spotifyApi.setRefreshToken(data.body['refresh_token']);
   spotifyApi.authorizationCodeGrant(req.body.spotifyAccessCode)
     .then(function(response) {
-      storeUserToken(req.body.userId, response.body.access_token);
-      //storeTokens(data.body['access_token'], data.body['refresh_token']);
-      //spotifyApi.setAccessToken(data.body['access_token']);
-      //spotifyApi.setRefreshToken(data.body['refresh_token']);
-      spotifyApi.setAccessToken(response.body.access_token)
+      return redisInterface.setUserSpotifyToken(req.body.userId, response.body.access_token);
+    })
+    .then(result => {
+      res.json({result: 'OK'})
+    })
+    .catch(err => {
+      res.json({result: err})
+    })
+    /*spotifyApi.setAccessToken(response.body.access_token)
       spotifyApi.setRefreshToken(response.body.refresh_token)
       spotifyApi.getMySavedTracks().then(function(data) {
         res.json({result: data})
       }, function(err) {
         res.json(err)
-      });
-    })
-    .catch(err => {
-      console.log('ERROR:', err)
-      res.json({result: err})
-    })
-}
-
-function storeUserToken(userId, accessToken) {
-  userToSpotifyAccessTokenMap[userId] = {};
-  userToSpotifyAccessTokenMap[userId].accessToken = accessToken;
-  console.log(userToSpotifyAccessTokenMap)
+      });*/
 }
 
 export default { authUrl, getAccessCode };
 /*
-var fs = require('fs');
-
-var SpotifyWebApi = require('spotify-web-api-node');
-var credentials = require('./config/client_secrets');
-var spotifyApi = new SpotifyWebApi(credentials);
-
-var tokens = require('./config/token.json');
-var spotify_ids = require('./config/spotify_ids.json');
-
-spotifyApi.setAccessToken(tokens.access_token);
-spotifyApi.setRefreshToken(tokens.refresh_token);
 
 function updatePlaylistIds() {
   spotifyApi.getUserPlaylists()
@@ -221,44 +202,5 @@ function checkAndAddTracks(userId, playlistId) {
   console.log('Spotify API error on playlist ' + playlistId, err);
 });
 }
-
-module.exports = {
-  getAuthUrl: function() {
-    return getAuthUrl();
-  },
-  getAccessToken: function(code) {
-    getAccessToken(code);
-  },
-  refreshToken: function(callback){
-    refreshToken(callback);
-  }
-}
-
-if (process.argv[2]) {
-  switch (process.argv[2]) {
-    case '--auth':
-    getAuthUrl();   
-    break;
-    case '--token':
-    getAccessToken(process.argv[3]);
-    break;
-    case '--add-tracks':
-    checkAndAddTracks(spotify_ids.user.spotify, spotify_ids.playlist.spotifydiscover);
-    checkAndAddTracks(spotify_ids.user.spotify, spotify_ids.playlist.release_radar);
-    break;
-    case '--refresh-token':
-    refreshToken();
-    break;
-  }
-}
-setInterval(refreshToken, 50 * 60 * 1000, function(){});
-setInterval(updatePlaylistIds, 4 * 1 * 60 * 1000);
-setInterval(function() {
-   //console.log('Updating playlist');
-   checkAndAddTracks(spotify_ids.user.spotify, spotify_ids.playlist.spotifydiscover);
-   checkAndAddTracks(spotify_ids.user.spotify, spotify_ids.playlist.release_radar);
- }, 20 * 60 * 1000);
-//checkAndAddTracks(spotify_ids.user.spotify, spotify_ids.playlist.spotifydiscover);
-//checkAndAddTracks(spotify_ids.user.spotify, spotify_ids.playlist.release_radar);
 
 */
