@@ -31,7 +31,6 @@ function exchangeCode(req, res, next) {
 }
 
 function refreshToken(userId) {
-  console.log('refreshing user token')
   redisInterface.getUserSpotifyTokens(userId)
   .then(tokens => {
     return spotifyInterface.refreshAccessToken(tokens.refreshToken)

@@ -34,7 +34,6 @@ class SpotifyInterface {
       spotifyApi.setRefreshToken(refreshToken);
       spotifyApi.refreshAccessToken()
       .then((data) => {
-        console.log(data)
         resolve({
           accessToken: data.body.access_token,
           refreshToken: spotifyApi.getRefreshToken()
