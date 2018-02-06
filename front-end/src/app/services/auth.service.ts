@@ -38,7 +38,6 @@ export class AuthService {
   }
 
   submitAccessCode(userId, spotifyAccessCode) {
-    console.log(userId, spotifyAccessCode)
 		return new Promise((resolve, reject) => {
 			this.http.post(`${environment.apiDomain}api/user/code`, {userId, spotifyAccessCode})
 				.toPromise()
