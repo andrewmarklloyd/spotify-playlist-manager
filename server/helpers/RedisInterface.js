@@ -14,9 +14,9 @@ class RedisInterface {
 
   }
 
-  setUserSpotifyTokens(userId, apiToken, refreshToken) {
+  setUserSpotifyTokens(userId, accessToken, refreshToken) {
     return new Promise((resolve, reject) => {
-      client.set(userId, JSON.stringify({apiToken, refreshToken}), function (err, reply) {
+      client.set(userId, JSON.stringify({accessToken, refreshToken}), function (err, reply) {
         if (err) {
           reject(err)
         } else {
