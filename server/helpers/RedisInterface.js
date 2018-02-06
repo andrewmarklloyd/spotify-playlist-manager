@@ -14,9 +14,9 @@ class RedisInterface {
 
   }
 
-  setUserSpotifyToken(userId, apiToken) {
+  setUserSpotifyTokens(userId, apiToken, refreshToken) {
     return new Promise((resolve, reject) => {
-      client.set(userId, apiToken, function (err, reply) {
+      client.set(userId, JSON.stringify({apiToken, refreshToken}), function (err, reply) {
         if (err) {
           reject(err)
         } else {
@@ -26,19 +26,19 @@ class RedisInterface {
     })
   }
 
-  getUserSpotifyToken(userId) {
+  getUserSpotifyTokens(userId) {
     return new Promise((resolve, reject) => {
       client.get(userId, function (err, reply) {
         if (err) {
           reject(err)
         } else {
-          resolve(reply.toString());
+          resolve(JSON.parse(reply.toString()));
         }
       });  
     })
   }
 
-  removeUserSpotifyToken(userId) {
+  removeUserSpotifyTokens(userId) {
     return new Promise((resolve, reject) => {
       client.del(userId, function(err, response) {
         if (response == 1) {

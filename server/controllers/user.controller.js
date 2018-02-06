@@ -4,35 +4,20 @@ import paramValidation from '../../config/param-validation';
 import config from '../../config/config';
 import APIError from '../helpers/APIError';
 import RedisInterface from '../helpers/RedisInterface';
+import SpotifyInterface from '../helpers/SpotifyInterface';
 
 const redisInterface = new RedisInterface();
+const spotifyInterface = new SpotifyInterface();
 
-const state = '';
-const scopes = ['user-read-private', 'user-read-email', 'playlist-read-private', 'user-library-read', 'playlist-modify-private', 'playlist-modify-public'];
-
-const spotifyApi = new SpotifyWebApi({
-  redirectUri : config.spotify.redirectUri,
-  clientId : config.spotify.clientId,
-  clientSecret: config.spotify.clientSecret
-})
-
-function authUrl(req, res, next) {
-  const authUrl = spotifyApi.createAuthorizeURL(scopes, state);
+function getAuthUrl(req, res, next) {
+  const authUrl = spotifyInterface.getAuthUrl();
   res.json({authUrl: authUrl})
 }
 
-function getAccessCode(req, res, next) {
-  // save and associate the user to the access code
-  // want to be able to cron the playlist checking, 
-  // refreshing the token. Send user an email if they need
-  // to reauthorize the app. Use token to get user's
-  // playlist info for analysis. "These other people
-  // added the same song as you!" etc.
-  //spotifyApi.setAccessToken(data.body['access_token']);
-  //spotifyApi.setRefreshToken(data.body['refresh_token']);
-  spotifyApi.authorizationCodeGrant(req.body.spotifyAccessCode)
+function exchangeCode(req, res, next) {
+  spotifyInterface.exchangeAccessCodeForTokens(req.body.spotifyAccessCode)
     .then(function(response) {
-      return redisInterface.setUserSpotifyToken(req.body.userId, response.body.access_token);
+      return redisInterface.setUserSpotifyTokens(req.body.userId, response.body.access_token, response.body.refresh_token);
     })
     .then(result => {
       res.json({result: 'OK'})
@@ -40,16 +25,9 @@ function getAccessCode(req, res, next) {
     .catch(err => {
       res.json({result: err})
     })
-    /*spotifyApi.setAccessToken(response.body.access_token)
-      spotifyApi.setRefreshToken(response.body.refresh_token)
-      spotifyApi.getMySavedTracks().then(function(data) {
-        res.json({result: data})
-      }, function(err) {
-        res.json(err)
-      });*/
 }
 
-export default { authUrl, getAccessCode };
+export default { getAuthUrl, exchangeCode };
 /*
 
 function updatePlaylistIds() {
