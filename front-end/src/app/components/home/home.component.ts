@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
       if (params.code) {
         this.authService.getUserInfo()
           .then((userInfo) => {
-            return this.authService.submitAccessCode(userInfo['name'], params.code)
+            return this.authService.submitAccessCode(userInfo['email'], params.code)
           })
           .then(result => {
             console.log(result)

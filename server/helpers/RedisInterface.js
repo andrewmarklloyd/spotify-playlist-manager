@@ -32,7 +32,11 @@ class RedisInterface {
         if (err) {
           reject(err)
         } else {
-          resolve(JSON.parse(reply.toString()));
+          if (reply) {
+            resolve(JSON.parse(reply.toString()));
+          } else {
+            resolve({})
+          }
         }
       });  
     })
