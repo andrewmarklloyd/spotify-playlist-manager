@@ -25,10 +25,6 @@ class SpotifyInterface {
     return spotifyApi.authorizationCodeGrant(accessCode);
   }
 
-  setAccessToken(accessToken) {
-    return spotifyApi.authorizationCodeGrant(spotifyAccessCode);
-  }
-
   refreshAccessToken(refreshToken) {
     return new Promise((resolve, reject) => {
       spotifyApi.setRefreshToken(refreshToken);
@@ -39,6 +35,55 @@ class SpotifyInterface {
           refreshToken: spotifyApi.getRefreshToken()
         })
       })  
+    })
+  }
+
+  _requestRetryWrapper() {
+
+  }
+
+  keepTrying(otherArgs, promise) {
+    promise = promise||new Promise();
+    
+    // try doing the important thing
+    
+    if(success) {
+      promise.resolve(result);
+    } else {
+      setTimeout(function() {
+        keepTrying(otherArgs, promise);
+      }, retryInterval);
+    }
+  }
+
+  updatePlaylistIds(accessToken) {
+    spotifyApi.setAccessToken(accessToken);
+    spotifyApi.getUserPlaylists()
+    .then(function(data) {
+      const spotifyIds = {}
+      console.log(data)
+      /// need to paginate responses
+      // can't save just playlist id, they tend to change
+      for (var d in data.body.items) {
+        switch (data.body.items[d].name) {
+          case 'Release Radar':
+            spotifyIds.releaseRadar = data.body.items[d].id;
+            break;
+          case 'Discover Weekly':
+            spotifyIds.spotifydiscover = data.body.items[d].id;
+            break;
+          case 'Currently':
+            spotifyIds.spotifydiscover = data.body.items[d].id;
+            break;
+          default:
+            console.log(data.body.items[d].name)
+        }
+      }
+      console.log(spotifyIds)
+    })
+    .catch(err => {
+      console.log('********')
+      console.log(err)
     })
   }
 }
