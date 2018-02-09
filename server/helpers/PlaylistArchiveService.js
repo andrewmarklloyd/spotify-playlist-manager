@@ -10,10 +10,27 @@ class PlaylistArchiveService {
     spotifyInterface = new SpotifyInterface();
   }
 
-  
+  tryUpdatePlaylist(userId) {
+    redisInterface.getUserSpotifyTokens('andrew85.lloyd@gmail.com')
+      .then(tokens => {
+        spotifyInterface.getPlaylistIds(tokens.accessToken.replace('a','b'))
+        .catch(err => {
+          if (err.message === 'Unauthorized') {
+            
+          }
+        })
+      })
+      .then(playlistIds => {
+        console.log('playlistIDs', playlistIds)
+      })
+
+  }
 }
 
 export default PlaylistArchiveService;
+
+const playlistArchiveService = new PlaylistArchiveService();
+playlistArchiveService.tryUpdatePlaylist()
 /*function refreshToken(userId) {
   redisInterface.getUserSpotifyTokens(userId)
   .then(tokens => {

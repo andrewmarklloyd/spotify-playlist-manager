@@ -5,6 +5,7 @@ import config from '../../config/config';
 import APIError from '../helpers/APIError';
 import RedisInterface from '../helpers/RedisInterface';
 import SpotifyInterface from '../helpers/SpotifyInterface';
+import PlaylistArchiveService from '../helpers/PlaylistArchiveService';
 
 const redisInterface = new RedisInterface();
 const spotifyInterface = new SpotifyInterface();
