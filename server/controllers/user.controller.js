@@ -9,14 +9,6 @@ import SpotifyInterface from '../helpers/SpotifyInterface';
 const redisInterface = new RedisInterface();
 const spotifyInterface = new SpotifyInterface();
 
-function test() {
-  redisInterface.getUserSpotifyTokens('andrew85.lloyd@gmail.com')
-  .then(tokens => {
-    spotifyInterface.updatePlaylistIds(tokens.accessToken)
-  })
-}
-test()
-
 function getAuthUrl(req, res, next) {
   const authUrl = spotifyInterface.getAuthUrl();
   res.json({authUrl: authUrl})
@@ -35,19 +27,6 @@ function exchangeCode(req, res, next) {
     .catch(err => {
       res.json({result: err})
     })
-}
-
-function refreshToken(userId) {
-  redisInterface.getUserSpotifyTokens(userId)
-  .then(tokens => {
-    return spotifyInterface.refreshAccessToken(tokens.refreshToken)
-  })
-  .then(function(newTokens) {
-    redisInterface.setUserSpotifyTokens(userId, newTokens.accessToken, newTokens.refreshToken)
-  })
-  .catch(err => {
-    console.log(err)
-  })
 }
 
 export default { getAuthUrl, exchangeCode };
