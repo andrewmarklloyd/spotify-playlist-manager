@@ -6,8 +6,14 @@ var spotifyInterface;
 
 
 
-function _updatePlaylist(userId) {
-
+function _getPlaylistIds(userId) {
+  return redisInterface.getUserSpotifyTokens(userId).then(tokens => {
+		return new Promise((resolve, reject) => {
+  		spotifyInterface.getPlaylistIdsRecursive(tokens.accessToken, (err, data) => {
+  			resolve(data)
+      })
+  	})
+  })
 }
 
 /*
@@ -29,29 +35,32 @@ class PlaylistArchiveService {
     spotifyInterface = new SpotifyInterface();
   }
 
-  updatePlaylist(userId) {
-    redisInterface.getUserSpotifyTokens('andrew85.lloyd@gmail.com')
-      .then(tokens => {
-        return new Promise((resolve, reject) => {
-          spotifyInterface.getPlaylistIds(tokens.accessToken)
-          .catch(err => {
-            if (err.message === 'Unauthorized') {
-              reject({retry: true})
-            } else {
-              reject({retry: false})
-            }
-          })
-          .then(playlistIds => {
-            resolve(playlistIds)
-          })
+  updatePlaylist(userId, callback) {
+    new Promise((resolve, reject) => {
+      _getPlaylistIds(userId)
+        .catch(err => {
+        	console.log(err)
+          if (err.message === 'Unauthorized') {
+            reject({unauthorized: true, error: err})
+          } else {
+            reject({unauthorized: false, error: err})
+          }
         })
-        .then(d => {
-          console.log(d)
-        })
-        .catch(e => {
-          console.log(e)
-        })
-      })
+        .then(playlistIds => {
+          resolve(playlistIds)
+        })  
+    })
+    .then(playlistIds => {
+      callback(null, playlistIds)
+    })
+    .catch(err => {
+      if (err.unauthorized) {
+        
+      } else {
+        callback(err, null)
+      }
+    })
+    
   }
 }
 
@@ -62,7 +71,13 @@ export default PlaylistArchiveService;
 // normal error
 
 const playlistArchiveService = new PlaylistArchiveService();
-playlistArchiveService.updatePlaylist()
+playlistArchiveService.updatePlaylist('me', function(err, result) {
+	if (err) {
+		console.log(err)
+	} else {
+		console.log('result:', result)
+	}
+})
 /*function refreshToken(userId) {
   redisInterface.getUserSpotifyTokens(userId)
   .then(tokens => {

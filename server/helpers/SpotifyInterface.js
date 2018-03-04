@@ -13,7 +13,7 @@ class SpotifyInterface {
       redirectUri : config.spotify.redirectUri,
       clientId : config.spotify.clientId,
       clientSecret: config.spotify.clientSecret
-    })    
+    })
   }
 
   getAuthUrl() {
@@ -38,26 +38,38 @@ class SpotifyInterface {
     })
   }
 
-  getPlaylistIds(accessToken) {
+  getPlaylistIdsRecursive(accessToken, callback, result, options) {
+    var options = options ? options : {limit: 50, offset: 0}
+    var result = result ? result : {}
+    this.getPlaylistIds(accessToken, options, result).then(result => {
+      if (result.next && !result.releaseRadar && !result.spotifydiscover) {
+        options.offset += 10;
+        this.getPlaylistIdsRecursive(accessToken, callback, result, options)
+      } else {
+        callback(null, result)
+      }
+    }).catch(err => {
+      callback(err)
+    })
+  }
+
+  getPlaylistIds(accessToken, options, result) {
     return new Promise((resolve, reject) => {
       spotifyApi.setAccessToken(accessToken);
-      spotifyApi.getUserPlaylists()
-      .then(function(data) {
-        //console.log(data.body.items)
-        const playlistIds = {}
-        /// need to paginate responses
-        // can't save just playlist id, they tend to change
+      spotifyApi.getUserPlaylists(0, options)
+      .then(data => {
         for (var d in data.body.items) {
           switch (data.body.items[d].name) {
             case 'Release Radar':
-              playlistIds.releaseRadar = data.body.items[d].id;
+              result.releaseRadar = data.body.items[d].id;
               break;
-            case 'Your Time Capsule':
-              playlistIds.spotifydiscover = data.body.items[d].id;
+            case 'Discover Weekly':
+              result.spotifydiscover = data.body.items[d].id;
               break;
           }
         }
-        resolve(playlistIds)
+        result.next = data.body.next;
+        resolve(result)
       })
       .catch(err => {
         reject(err)
