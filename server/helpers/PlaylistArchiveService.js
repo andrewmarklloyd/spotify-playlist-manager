@@ -73,14 +73,14 @@ export default PlaylistArchiveService;
 // refresh the token, and then try again. If it error for anything else, handle it like a
 // normal error
 
-const playlistArchiveService = new PlaylistArchiveService();
-playlistArchiveService.updatePlaylist('andrewlloyd8', function(err, result) {
+/*const playlistArchiveService = new PlaylistArchiveService();
+playlistArchiveService.updatePlaylist('andrewlloyd85', function(err, result) {
 	if (err) {
 		console.log(err)
 	} else {
 		console.log('playlistArchiveService result:', result)
 	}
-})
+})*/
 /*function refreshToken(userId) {
   redisInterface.getUserSpotifyTokens(userId)
   .then(tokens => {

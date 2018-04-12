@@ -12,7 +12,7 @@
   "scripts": {
     "start": "concurrently --kill-others \"npm run start:back\" \"npm run start:front\"",
     "start:back": "gulp serve",
-    "start:front": "cd front-end; ng serve",
+    "start:front": "cd front-end; npm start",
     "build:front": "cd front-end; npm run build",
     "build:start": "npm run build; node dist/index.js",
     "build": "cd front-end; npm run build; cd ../; gulp"

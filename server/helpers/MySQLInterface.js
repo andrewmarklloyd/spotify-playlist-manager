@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
   password : config.mysql.password,
   database : config.mysql.database
 });
-console.log(config.mysql.database)
+
 class MySQLInterface {
   constructor() {
     /*connection.connect(function(err) {
@@ -30,7 +30,7 @@ class MySQLInterface {
       const userInfo  = {userId, accessToken, refreshToken };
       connection.query('REPLACE INTO usertokens SET ?', userInfo, function (error, results, fields) {
         if (error) reject(error);
-        resolve(results);
+        resolve(userId);
       });
     })
   }

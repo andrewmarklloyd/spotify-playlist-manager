@@ -70,10 +70,14 @@ class SpotifyInterface {
         for (var d in data.body.items) {
           switch (data.body.items[d].name) {
             case 'Release Radar':
-              result.releaseRadar = data.body.items[d].id;
+              if (data.body.items[d].owner.id == 'spotify') {
+                result.releaseRadar = data.body.items[d].id;  
+              }
               break;
             case 'Discover Weekly':
-              result.spotifydiscover = data.body.items[d].id;
+              if (data.body.items[d].owner.id == 'spotify') {
+                result.spotifydiscover = data.body.items[d].id;
+              }
               break;
           }
         }

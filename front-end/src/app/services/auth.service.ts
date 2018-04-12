@@ -18,6 +18,9 @@ export class AuthService {
 				.then(res => {
 					resolve(res.json().authUrl)
 				})
+        .catch(err => {
+          alert(err)
+        })
 		})
   }
 

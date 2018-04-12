@@ -29,7 +29,7 @@ const envVarsSchema = Joi.object({
   SPOTIFY_REDIRECT_URI: Joi.string()
     .when('NODE_ENV', {
       is: Joi.string().equal('development'),
-      then: Joi.string().default('http://localhost:4200/'),
+      then: Joi.string().default('http://192.168.0.106:4200/'),
       otherwise: Joi.string().default('http://localhost:3000')
     }),
 }).unknown()

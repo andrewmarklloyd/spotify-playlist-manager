@@ -10,6 +10,8 @@ import PlaylistArchiveService from '../helpers/PlaylistArchiveService';
 const mysqlInterface = new MySQLInterface();
 const spotifyInterface = new SpotifyInterface();
 
+const playlistArchiveService = new PlaylistArchiveService();
+
 function getAuthUrl(req, res, next) {
   const authUrl = spotifyInterface.getAuthUrl();
   res.json({authUrl: authUrl})
@@ -20,7 +22,14 @@ function exchangeCode(req, res, next) {
     .then(function(response) {
       return mysqlInterface.setUserSpotifyTokens(response.body.userId, response.body.access_token, response.body.refresh_token);
     })
-    .then(result => {
+    .then(userId => {
+      playlistArchiveService.updatePlaylist(userId, function(err, result) {
+        if (err) {
+          console.log(err)
+        } else {
+          console.log('playlistArchiveService result:', result)
+        }
+      })
       res.json({result: 'OK'})
     })
     .catch(err => {
