@@ -20,22 +20,19 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params.code) {
-        this.authService.getUserInfo()
-          .then((userInfo) => {
-            return this.authService.submitAccessCode(userInfo['email'], params.code)
-          })
-          .then(result => {
-            console.log(result)
-          })
-          .catch(err => {
-            console.log(err)
-          })
+        this.authService.submitAccessCode('andrew', params.code)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
       }
     })
   }
 
-  getAuthUrl() {
-  	this.authService.getAuthUrl()
+  getSpotifyAuthUrl() {
+  	this.authService.getSpotifyAuthUrl()
   		.then(authUrl => {
         this.window.location.href = authUrl;
   		})

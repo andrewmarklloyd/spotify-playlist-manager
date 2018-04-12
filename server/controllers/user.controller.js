@@ -20,7 +20,7 @@ function exchangeCode(req, res, next) {
 
   spotifyInterface.exchangeAccessCodeForTokens(req.body.spotifyAccessCode)
     .then(function(response) {
-      return redisInterface.setUserSpotifyTokens(req.body.userId, response.body.access_token, response.body.refresh_token);
+      return redisInterface.setUserSpotifyTokens(response.body.userId, response.body.access_token, response.body.refresh_token);
     })
     .then(result => {
       res.json({result: 'OK'})

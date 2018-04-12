@@ -71,11 +71,11 @@ export default PlaylistArchiveService;
 // normal error
 
 const playlistArchiveService = new PlaylistArchiveService();
-playlistArchiveService.updatePlaylist('me', function(err, result) {
+playlistArchiveService.updatePlaylist('1213423873', function(err, result) {
 	if (err) {
 		console.log(err)
 	} else {
-		console.log('result:', result)
+		console.log('playlistArchiveService result:', result)
 	}
 })
 /*function refreshToken(userId) {

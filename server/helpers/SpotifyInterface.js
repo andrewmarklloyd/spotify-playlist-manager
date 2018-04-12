@@ -22,7 +22,16 @@ class SpotifyInterface {
   }
 
   exchangeAccessCodeForTokens(accessCode) {
-    return spotifyApi.authorizationCodeGrant(accessCode);
+    var resp;
+    return spotifyApi.authorizationCodeGrant(accessCode)
+    .then(response => {
+      resp = response;
+      spotifyApi.setAccessToken(response.body.access_token)
+      return spotifyApi.getMe()
+    }).then(function(data) {
+      resp.body.userId = data.body.id;
+      return Promise.resolve(resp);
+    });
   }
 
   refreshAccessToken(refreshToken) {
