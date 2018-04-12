@@ -1,8 +1,13 @@
 version: '2'
 
 services:
-  redis:
-    image: redis:4
-    container_name: redis
+  db:
+    image: mysql:5.5
+    restart: always
+    environment:
+      MYSQL_DATABASE: spotifyapi
+      MYSQL_USER: spotifyapi
+      MYSQL_PASSWORD: password
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
     ports:
-      - "6379:6379"
+    - "3307:3306"

@@ -21,9 +21,10 @@ services:
     # Set environment variables from this file
     env_file:
       - .env
-
-    mongo:
-    image: "mongo:3.4.10"
-    container_name: sedaily-mongo
+  db:
+    image: mysql:5.5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
     ports:
-      - "27017:27017"
+    - "3306:3306"

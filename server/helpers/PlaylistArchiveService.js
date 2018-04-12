@@ -1,7 +1,5 @@
-import RedisInterface from '../helpers/RedisInterface';
 import SpotifyInterface from '../helpers/SpotifyInterface';
 
-var redisInterface;
 var spotifyInterface;
 
 

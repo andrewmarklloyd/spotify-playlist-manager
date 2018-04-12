@@ -3,11 +3,11 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import paramValidation from '../../config/param-validation';
 import config from '../../config/config';
 import APIError from '../helpers/APIError';
-import RedisInterface from '../helpers/RedisInterface';
+import MySQLInterface from '../helpers/MySQLInterface';
 import SpotifyInterface from '../helpers/SpotifyInterface';
-import PlaylistArchiveService from '../helpers/PlaylistArchiveService';
+//import PlaylistArchiveService from '../helpers/PlaylistArchiveService';
 
-const redisInterface = new RedisInterface();
+const mysqlInterface = new MySQLInterface();
 const spotifyInterface = new SpotifyInterface();
 
 function getAuthUrl(req, res, next) {
@@ -18,7 +18,7 @@ function getAuthUrl(req, res, next) {
 function exchangeCode(req, res, next) {
   spotifyInterface.exchangeAccessCodeForTokens(req.body.spotifyAccessCode)
     .then(function(response) {
-      return redisInterface.setUserSpotifyTokens(response.body.userId, response.body.access_token, response.body.refresh_token);
+      return mysqlInterface.setUserSpotifyTokens(response.body.userId, response.body.access_token, response.body.refresh_token);
     })
     .then(result => {
       res.json({result: 'OK'})

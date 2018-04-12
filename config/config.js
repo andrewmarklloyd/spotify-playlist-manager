@@ -10,12 +10,18 @@ const envVarsSchema = Joi.object({
     .default('development'),
   PORT: Joi.number()
     .default(3000),
-  JWT_SECRET: Joi.string().required()
-    .description('JWT Secret required to sign'),
-  MONGO_HOST: Joi.string().required()
-    .description('Mongo DB host url'),
-  MONGO_PORT: Joi.number()
-    .default(27017),
+  DB_SECRET: Joi.string().required()
+    .description('Database encryption secret required'),
+  MYSQL_HOST: Joi.string().required()
+    .description('MySQL host url'),
+  MYSQL_PORT: Joi.number()
+    .default(3306),
+  MYSQL_USER: Joi.string().required()
+    .description('MySQL username'),
+  MYSQL_PASSWORD: Joi.string().required()
+    .description('MySQL password'),
+  MYSQL_DATABASE: Joi.string().required()
+    .description('MySQL database name'),
   SPOTIFY_CLIENT_ID: Joi.string().required()
     .description('Spotify client Id required'),
   SPOTIFY_CLIENT_SECRET: Joi.string().required()
@@ -38,10 +44,13 @@ const config = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
   jwtSecret: envVars.JWT_SECRET, 
-  mongo: {
-    host: envVars.MONGO_HOST,
-    test: envVars.MONGO_HOST_TEST,
-    port: envVars.MONGO_PORT
+  mysql: {
+    dbEncryptionSecret: envVars.DB_ENCRYPTION_SECRET,
+    host: envVars.MYSQL_HOST,
+    port: envVars.MYSQL_PORT,
+    user: envVars.MYSQL_USER,
+    password: envVars.MYSQL_PASSWORD,
+    database: envVars.MYSQL_DATABASE
   },
   spotify: {
     clientId: envVars.SPOTIFY_CLIENT_ID,
