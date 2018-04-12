@@ -45,7 +45,7 @@ const config = {
   port: envVars.PORT,
   jwtSecret: envVars.JWT_SECRET, 
   mysql: {
-    dbEncryptionSecret: envVars.DB_ENCRYPTION_SECRET,
+    dbEncryptionSecret: envVars.DB_SECRET,
     host: envVars.MYSQL_HOST,
     port: envVars.MYSQL_PORT,
     user: envVars.MYSQL_USER,
