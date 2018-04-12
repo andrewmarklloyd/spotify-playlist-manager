@@ -1,16 +1,21 @@
 import SpotifyInterface from '../helpers/SpotifyInterface';
+import MySQLInterface from '../helpers/MySQLInterface';
 
 var spotifyInterface;
-
+var mysqlInterface;
 
 
 function _getPlaylistIds(userId) {
-  return redisInterface.getUserSpotifyTokens(userId).then(tokens => {
-		return new Promise((resolve, reject) => {
-  		spotifyInterface.getPlaylistIdsRecursive(tokens.accessToken, (err, data) => {
-  			resolve(data)
+  return mysqlInterface.getUserSpotifyTokens(userId).then(data => {
+    if (data[0]) {
+      return new Promise((resolve, reject) => {
+        spotifyInterface.getPlaylistIdsRecursive(data[0].accessToken, (err, data) => {
+          resolve(data)
+        })
       })
-  	})
+    } else {
+      return Promise.reject('No user found')
+    }
   })
 }
 
@@ -29,7 +34,7 @@ function _handleOtherErrors(error) {
 
 class PlaylistArchiveService {
   constructor() {
-    redisInterface = new RedisInterface();
+    mysqlInterface = new MySQLInterface();
     spotifyInterface = new SpotifyInterface();
   }
 
@@ -69,7 +74,7 @@ export default PlaylistArchiveService;
 // normal error
 
 const playlistArchiveService = new PlaylistArchiveService();
-playlistArchiveService.updatePlaylist('me', function(err, result) {
+playlistArchiveService.updatePlaylist('andrewlloyd8', function(err, result) {
 	if (err) {
 		console.log(err)
 	} else {

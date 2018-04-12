@@ -5,7 +5,7 @@ import config from '../../config/config';
 import APIError from '../helpers/APIError';
 import MySQLInterface from '../helpers/MySQLInterface';
 import SpotifyInterface from '../helpers/SpotifyInterface';
-//import PlaylistArchiveService from '../helpers/PlaylistArchiveService';
+import PlaylistArchiveService from '../helpers/PlaylistArchiveService';
 
 const mysqlInterface = new MySQLInterface();
 const spotifyInterface = new SpotifyInterface();
