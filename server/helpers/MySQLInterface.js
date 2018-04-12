@@ -18,10 +18,8 @@ class MySQLInterface {
   }
 
   setUserSpotifyTokens(userId, accessToken, refreshToken) {
-    console.log(accessToken)
-    console.log(encrypt(accessToken))
     return new Promise((resolve, reject) => {
-      const userInfo = {userId: encrypt(userId), accessToken: encrypt(accessToken), refreshToken: encrypt(refreshToken) };
+      const userInfo = {userId: userId, accessToken: encrypt(accessToken), refreshToken: encrypt(refreshToken) };
       connection.query('REPLACE INTO usertokens SET ?', userInfo, function (error, results, fields) {
         if (error) reject(error);
         resolve(userId);
@@ -33,7 +31,16 @@ class MySQLInterface {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM usertokens WHERE userId = ?', [userId], function (error, results, fields) {
         if (error) reject(error);
-          resolve(results);
+        if (results[0]) {
+          const tokenInfo = []
+          tokenInfo.accessToken = decrypt(results[0].accessToken);
+          tokenInfo.refreshToken = decrypt(results[0].refreshToken);
+          tokenInfo.userId = results[0].userId;
+          tokenInfo.email = results[0].email;
+          resolve(tokenInfo);
+        } else {
+          resolve(null);
+        }
       });
     })
   }

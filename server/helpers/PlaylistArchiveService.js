@@ -6,10 +6,10 @@ var mysqlInterface;
 
 
 function _getPlaylistIds(userId) {
-  return mysqlInterface.getUserSpotifyTokens(userId).then(data => {
-    if (data[0]) {
+  return mysqlInterface.getUserSpotifyTokens(userId).then(tokenInfo => {
+    if (tokenInfo) {
       return new Promise((resolve, reject) => {
-        spotifyInterface.getPlaylistIdsRecursive(data[0].accessToken, (err, data) => {
+        spotifyInterface.getPlaylistIdsRecursive(tokenInfo.accessToken, (err, data) => {
           resolve(data)
         })
       })
