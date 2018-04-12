@@ -27,13 +27,15 @@ export class AuthService {
     })
   }
 
-  submitAccessCode(userId, spotifyAccessCode) {
+  submitAccessCode(spotifyAccessCode) {
 		return new Promise((resolve, reject) => {
-			this.http.post(`${environment.apiDomain}api/user/code`, {userId, spotifyAccessCode})
+			this.http.post(`${environment.apiDomain}api/user/code`, {spotifyAccessCode})
 				.toPromise()
 				.then(res => {
 					resolve(res.json())
-				})
+				}).catch(err => {
+          reject(err)
+        })
 		})
   }
 

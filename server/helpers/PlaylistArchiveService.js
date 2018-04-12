@@ -71,7 +71,7 @@ export default PlaylistArchiveService;
 // normal error
 
 const playlistArchiveService = new PlaylistArchiveService();
-playlistArchiveService.updatePlaylist('1213423873', function(err, result) {
+playlistArchiveService.updatePlaylist('me', function(err, result) {
 	if (err) {
 		console.log(err)
 	} else {

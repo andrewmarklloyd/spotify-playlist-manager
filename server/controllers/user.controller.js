@@ -16,8 +16,6 @@ function getAuthUrl(req, res, next) {
 }
 
 function exchangeCode(req, res, next) {
-  var userId = req.body.userId;
-
   spotifyInterface.exchangeAccessCodeForTokens(req.body.spotifyAccessCode)
     .then(function(response) {
       return redisInterface.setUserSpotifyTokens(response.body.userId, response.body.access_token, response.body.refresh_token);
@@ -26,7 +24,8 @@ function exchangeCode(req, res, next) {
       res.json({result: 'OK'})
     })
     .catch(err => {
-      res.json({result: err})
+      const apiError = new APIError(err);
+      next(apiError);
     })
 }
 

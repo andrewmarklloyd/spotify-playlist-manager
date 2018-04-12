@@ -20,12 +20,13 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params.code) {
-        this.authService.submitAccessCode('andrew', params.code)
+        this.authService.submitAccessCode(params.code)
         .then(res => {
-          console.log(res)
+          console.log(res['result'])
         })
         .catch(err => {
-          console.log(err)
+          //alert(err.statusText)
+          console.log(err);
         })
       }
     })
