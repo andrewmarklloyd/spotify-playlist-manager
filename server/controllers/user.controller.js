@@ -43,14 +43,12 @@ function authenticateUser(req, res, next) {
 }
 
 function createPlaylist(req, res, next) {
-  mysqlInterface.getUserSpotifyTokens(req.body.userId)
-    .then(result => {
-      if (result) {
-        res.json({authenticated: true, userId: result.userId});
-      } else {
-        res.json({authenticated: false});
-      }
-    })
+  res.json({playlistId: '12345'})
 }
 
-export default { getAuthUrl, exchangeCode, authenticateUser, createPlaylist };
+function getPlaylistId(req, res, next) {
+  res.json({playlistId: '12345'})
+}
+
+
+export default { getAuthUrl, exchangeCode, authenticateUser, createPlaylist, getPlaylistId };

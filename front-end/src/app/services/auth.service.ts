@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions } from '@angular/http';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import { environment } from '../../environments/environment';
@@ -76,6 +76,21 @@ export class AuthService {
       this.http.post(`${environment.apiDomain}api/user/authenticate`, { userId })
         .toPromise()
         .then(response => {
+          resolve(response.json());
+        }).catch(err => {
+          reject(err);
+        })
+    });
+  }
+
+  public getPlaylistId() {
+    return new Promise((resolve, reject) => {
+      const userId = localStorage.getItem('userId');
+      const options = new RequestOptions({ params: { userId } })
+      this.http.get(`${environment.apiDomain}api/user/playlist-id`, options)
+        .toPromise()
+        .then(response => {
+          console.log(response)
           resolve(response.json());
         }).catch(err => {
           reject(err);

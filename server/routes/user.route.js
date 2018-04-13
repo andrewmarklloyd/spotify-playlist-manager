@@ -13,6 +13,9 @@ router.route('/code')
 router.route('/authenticate')
   .post(controller.authenticateUser);
 
+router.route('/playlist-id')
+  .get(controller.getPlaylistId);
+
 router.route('/create-playlist')
   .post(controller.createPlaylist);
 

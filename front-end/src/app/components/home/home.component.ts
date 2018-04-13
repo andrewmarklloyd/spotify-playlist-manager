@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
             this.authService.setSession(res['userId']);
             console.log(res['playlistId'])
             //if playlist not created, then create it
-            //this.authService.createPlaylist();
+            this.authService.getPlaylistId();
             this.router.navigate(['/'], {queryParams: {}});
           }
         })
