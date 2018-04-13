@@ -12,9 +12,10 @@ const connection = mysql.createConnection({
 
 class MySQLInterface {
   constructor() {
-    connection.query('CREATE TABLE IF NOT EXISTS usertokens (userId VARCHAR(100) NOT NULL, email TEXT NOT NULL, accessToken TEXT NOT NULL, refreshToken TEXT NOT NULL, playlistId VARCHAR(125) NOT NULL, PRIMARY KEY (userId))', function (error, results, fields) {
+    connection.query('CREATE TABLE IF NOT EXISTS usertokens (userId VARCHAR(100) NOT NULL, email TEXT NOT NULL, accessToken TEXT NOT NULL, refreshToken TEXT NOT NULL, PRIMARY KEY (userId))', function (error, results, fields) {
         if (error) console.log(error);
     });
+    // create a separate table for userId and playlistId
   }
 
   setUserSpotifyTokens(userId, accessToken, refreshToken) {

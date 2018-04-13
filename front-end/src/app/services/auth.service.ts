@@ -50,6 +50,7 @@ export class AuthService {
   public logout(): void {
     localStorage.removeItem('userId');
     this.router.navigate(['/']);
+    this.router.navigate(['/'], {queryParams: {}});
   }
 
   public isAuthenticated() {
@@ -66,6 +67,19 @@ export class AuthService {
       } else {
         resolve(false);
       }
+    });
+  }
+
+  public createPlaylist() {
+    return new Promise((resolve, reject) => {
+      const userId = localStorage.getItem('userId');
+      this.http.post(`${environment.apiDomain}api/user/authenticate`, { userId })
+        .toPromise()
+        .then(response => {
+          resolve(response.json());
+        }).catch(err => {
+          reject(err);
+        })
     });
   }
 }

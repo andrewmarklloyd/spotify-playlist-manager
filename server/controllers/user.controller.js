@@ -18,10 +18,8 @@ function getAuthUrl(req, res, next) {
 }
 
 function exchangeCode(req, res, next) {
-  var userAccessToken;
   spotifyInterface.exchangeAccessCodeForTokens(req.body.spotifyAccessCode)
     .then(function(response) {
-      userAccessToken = response.body.access_token;
       return mysqlInterface.setUserSpotifyTokens(response.body.userId, response.body.access_token, response.body.refresh_token);
     })
     .then(userId => {
