@@ -28,10 +28,10 @@ export class HomeComponent implements OnInit {
       if (params.code) {
         this.authService.submitAccessCode(params.code)
         .then(res => {
-          console.log(res)
           if (res['userId']) {
             this.authenticated = true;
             this.authService.setSession(res['userId']);
+            this.router.navigate(['/'], {queryParams: {}});
           }
         })
         .catch(err => {
