@@ -11,6 +11,7 @@ export class HomeComponent implements OnInit {
 
   private window: any;
   private authenticated: boolean;
+  private initialized: boolean;
 
   constructor(private authService: AuthService,
               private router: Router,
@@ -20,6 +21,7 @@ export class HomeComponent implements OnInit {
     this.authService.isAuthenticated()
       .then(result => {
         self.authenticated = result['authenticated'];
+        self.initialized = true;
       })
   }
 

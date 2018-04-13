@@ -23,14 +23,7 @@ function exchangeCode(req, res, next) {
       return mysqlInterface.setUserSpotifyTokens(response.body.userId, response.body.access_token, response.body.refresh_token);
     })
     .then(userId => {
-      playlistArchiveService.updatePlaylist(userId, function(err, result) {
-        if (err) {
-          console.log(err)
-        } else {
-          console.log('playlistArchiveService result:', result)
-        }
-      })
-      res.json({userId})
+      res.json({userId});
     })
     .catch(err => {
       const apiError = new APIError(err);
