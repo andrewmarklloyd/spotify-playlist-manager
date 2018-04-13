@@ -32,7 +32,7 @@ class MySQLInterface {
       connection.query('SELECT * FROM usertokens WHERE userId = ?', [userId], function (error, results, fields) {
         if (error) reject(error);
         if (results[0]) {
-          const tokenInfo = []
+          const tokenInfo = {};
           tokenInfo.accessToken = decrypt(results[0].accessToken);
           tokenInfo.refreshToken = decrypt(results[0].refreshToken);
           tokenInfo.userId = results[0].userId;

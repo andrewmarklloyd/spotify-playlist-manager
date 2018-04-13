@@ -30,7 +30,7 @@ function exchangeCode(req, res, next) {
           console.log('playlistArchiveService result:', result)
         }
       })
-      res.json({result: 'OK'})
+      res.json({userId})
     })
     .catch(err => {
       const apiError = new APIError(err);
@@ -38,4 +38,15 @@ function exchangeCode(req, res, next) {
     })
 }
 
-export default { getAuthUrl, exchangeCode };
+function authenticateUser(req, res, next) {
+  mysqlInterface.getUserSpotifyTokens(req.body.userId)
+    .then(result => {
+      if (result) {
+        res.json({authenticated: true, userId: result.userId});
+      } else {
+        res.json({authenticated: false});
+      }
+    })
+}
+
+export default { getAuthUrl, exchangeCode, authenticateUser };

@@ -10,4 +10,7 @@ router.route('/auth-url')
 router.route('/code')
   .post(controller.exchangeCode);
 
+router.route('/authenticate')
+  .post(controller.authenticateUser);
+
 export default router;

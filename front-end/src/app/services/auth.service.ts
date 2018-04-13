@@ -11,7 +11,7 @@ export class AuthService {
   						public router: Router) {
   }
 
-  getSpotifyAuthUrl() {
+  public getSpotifyAuthUrl() {
 		return new Promise((resolve, reject) => {
 			this.http.get(`${environment.apiDomain}api/user/auth-url`)
 				.toPromise()
@@ -24,13 +24,7 @@ export class AuthService {
 		})
   }
 
-  getUserInfo() {
-    return new Promise((resolve, reject) => {
-      
-    })
-  }
-
-  submitAccessCode(spotifyAccessCode) {
+  public submitAccessCode(spotifyAccessCode) {
 		return new Promise((resolve, reject) => {
 			this.http.post(`${environment.apiDomain}api/user/code`, {spotifyAccessCode})
 				.toPromise()
@@ -42,20 +36,8 @@ export class AuthService {
 		})
   }
 
-  login(): void {
-  	
-  }
-
-  public handleAuthentication(): void {
-    
-  }
-
-  private setSession(authResult): void {  
-    // Set the time that the access token will expire at
-    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-    localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
-    localStorage.setItem('expires_at', expiresAt);
+  public setSession(userId): void {  
+    localStorage.setItem('userId', userId);
   }
 
   private getSession(): void {
@@ -66,28 +48,26 @@ export class AuthService {
   }
 
   public logout(): void {
-    // Remove tokens and expiry time from localStorage
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
     localStorage.removeItem('userId');
-    // Go back to the home route
     this.router.navigate(['/']);
   }
 
-  public isAuthenticated(): boolean {
-    // Check whether the current time is past the
-    // access token's expiry time
-    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    const authenticated = new Date().getTime() < expiresAt;
-    return authenticated;
+  public isAuthenticated() {
+    return new Promise((resolve, reject) => {
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        this.http.post(`${environment.apiDomain}api/user/authenticate`, { userId })
+          .toPromise()
+          .then(response => {
+            resolve(response.json());
+          }).catch(err => {
+            reject(err);
+          })
+      } else {
+        resolve(false);
+      }
+    });
   }
 }
-
-
-
-
-
-
 
 
