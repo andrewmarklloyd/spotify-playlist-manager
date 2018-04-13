@@ -89,6 +89,11 @@ class SpotifyInterface {
       })
     })
   }
+
+  createAggregatePlaylist(userId, accessToken) {
+    spotifyApi.setAccessToken(accessToken);
+    return spotifyApi.createPlaylist(userId, 'Release Discovery', { 'public' : false });
+  }
 }
 
 export default SpotifyInterface;

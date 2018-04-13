@@ -13,4 +13,7 @@ router.route('/code')
 router.route('/authenticate')
   .post(controller.authenticateUser);
 
+router.route('/create-playlist')
+  .post(controller.createPlaylist);
+
 export default router;
