@@ -44,14 +44,34 @@ function authenticateUser(req, res, next) {
 
 function createPlaylist(req, res, next) {
   mysqlInterface.getUserSpotifyTokens(req.body.userId)
-    .then(result => {
-      if (result) {
-        spotifyInterface.createAggregatePlaylist(req.body.userId, result.accessToken, result.refreshToken)
-        .then(response => {
-          console.log(response)
+    .then(tokenResult => {
+      if (tokenResult) {
+        new Promise((resolve, reject) => {
+          playlistArchiveService.getPlaylists(req.body.userId, function(err, result) {
+            if (err) {
+              reject(err)
+            } else {
+              resolve(result);
+            }
+          })  
+        })
+        .then(result => {
+          if (result.releaseDiscovery) {
+            res.json({authenticated: true, userId: req.body.userId, releaseDiscovery: result.releaseDiscovery, initialCreation: false});
+          } else {
+            spotifyInterface.createAggregatePlaylist(req.body.userId, tokenResult.accessToken)
+            .then(response => {
+              res.json({authenticated: true, userId: req.body.userId, releaseDiscovery: response.body.id, initialCreation: true});
+            })
+            .catch(err => {
+              const apiError = new APIError(err);
+              next(apiError);
+            })
+          }
         })
         .catch(err => {
-          console.log(err)
+          const apiError = new APIError(err);
+          next(apiError);
         })
       } else {
         res.json({authenticated: false});

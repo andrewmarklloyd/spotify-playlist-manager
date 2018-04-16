@@ -38,6 +38,10 @@ export class CallbackComponent implements OnInit {
         		return this.createPlaylist();
         	}
         })
+        .then(result => {
+        	const playlistUrl = `https://open.spotify.com/user/andrewlloyd85/playlist/7cseUSF9JjRQVNYTuKC1Df?si=cvQhowHoRP6RTYs5OIPZiQ`;
+        	console.log(result);
+        })
         .catch(err => {
           console.log(err);
         })
@@ -62,7 +66,6 @@ export class CallbackComponent implements OnInit {
 
   logout() {
     this.authService.logout();
-    this.authenticated = false;
   }
 
 }

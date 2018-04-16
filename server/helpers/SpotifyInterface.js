@@ -79,6 +79,9 @@ class SpotifyInterface {
                 result.spotifydiscover = data.body.items[d].id;
               }
               break;
+            case 'Release Discovery':
+              result.releaseDiscovery = data.body.items[d].id;
+              break;
           }
         }
         result.next = data.body.next;
@@ -91,6 +94,11 @@ class SpotifyInterface {
   }
 
   createAggregatePlaylist(userId, accessToken, refreshToken) {
+    spotifyApi.setAccessToken(accessToken);
+    return spotifyApi.createPlaylist(userId, 'Release Discovery', { 'public' : false });
+  }
+
+  getAggregatePlaylist(userId, accessToken, refreshToken) {
     spotifyApi.setAccessToken(accessToken);
     return spotifyApi.createPlaylist(userId, 'Release Discovery', { 'public' : false });
   }

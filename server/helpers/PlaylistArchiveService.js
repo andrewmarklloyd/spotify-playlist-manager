@@ -38,7 +38,7 @@ class PlaylistArchiveService {
     spotifyInterface = new SpotifyInterface();
   }
 
-  updatePlaylist(userId, callback) {
+  getPlaylists(userId, callback) {
     new Promise((resolve, reject) => {
       _getPlaylistIds(userId)
         .catch(err => {
