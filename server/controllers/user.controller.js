@@ -43,14 +43,25 @@ function authenticateUser(req, res, next) {
 }
 
 function createPlaylist(req, res, next) {
-  console.log(req.body.userId)
-  res.json({playlistId: '12345'})
+  mysqlInterface.getUserSpotifyTokens(req.body.userId)
+    .then(result => {
+      if (result) {
+        spotifyInterface.createAggregatePlaylist(req.body.userId, result.accessToken, result.refreshToken)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      } else {
+        res.json({authenticated: false});
+      }
+    })
 }
 
 function getPlaylistId(req, res, next) {
   mysqlInterface.getUserPlaylist(req.query.userId)
     .then(result => {
-      console.log(result)
       res.json({playlistId: result})
     })
     .catch(err => {

@@ -90,7 +90,7 @@ class SpotifyInterface {
     })
   }
 
-  createAggregatePlaylist(userId, accessToken) {
+  createAggregatePlaylist(userId, accessToken, refreshToken) {
     spotifyApi.setAccessToken(accessToken);
     return spotifyApi.createPlaylist(userId, 'Release Discovery', { 'public' : false });
   }
