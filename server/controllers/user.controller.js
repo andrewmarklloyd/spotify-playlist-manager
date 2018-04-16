@@ -43,11 +43,20 @@ function authenticateUser(req, res, next) {
 }
 
 function createPlaylist(req, res, next) {
+  console.log(req.body.userId)
   res.json({playlistId: '12345'})
 }
 
 function getPlaylistId(req, res, next) {
-  res.json({playlistId: '12345'})
+  mysqlInterface.getUserPlaylist(req.query.userId)
+    .then(result => {
+      console.log(result)
+      res.json({playlistId: result})
+    })
+    .catch(err => {
+      const apiError = new APIError(err);
+      next(apiError);
+    })
 }
 
 

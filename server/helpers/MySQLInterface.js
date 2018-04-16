@@ -15,6 +15,9 @@ class MySQLInterface {
     connection.query('CREATE TABLE IF NOT EXISTS usertokens (userId VARCHAR(100) NOT NULL, email TEXT NOT NULL, accessToken TEXT NOT NULL, refreshToken TEXT NOT NULL, PRIMARY KEY (userId))', function (error, results, fields) {
         if (error) console.log(error);
     });
+    connection.query('CREATE TABLE IF NOT EXISTS userplaylist (userId VARCHAR(100) NOT NULL, playlistId TEXT NOT NULL, FOREIGN KEY (userId) REFERENCES usertokens(userId) ON DELETE CASCADE, PRIMARY KEY (userId))', function (error, results, fields) {
+        if (error) console.log(error);
+    });
     // create a separate table for userId and playlistId
   }
 
@@ -42,6 +45,31 @@ class MySQLInterface {
         } else {
           resolve(null);
         }
+      });
+    })
+  }
+
+  getUserPlaylist(userId) {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT * FROM userplaylist WHERE userId = ?', [userId], function (error, results, fields) {
+        if (error) reject(error);
+        if (results[0]) {
+          const playlistInfo = {};
+          console.log(results)
+          resolve(playlistInfo);
+        } else {
+          resolve(null);
+        }
+      });
+    })
+  }
+
+  setUserPlaylist(userId, playlistId) {
+    return new Promise((resolve, reject) => {
+      const userInfo = {userId, playlistId };
+      connection.query('REPLACE INTO userplaylist SET ?', userInfo, function (error, results, fields) {
+        if (error) reject(error);
+        resolve(userId);
       });
     })
   }

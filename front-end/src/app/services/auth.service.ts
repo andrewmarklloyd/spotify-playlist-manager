@@ -73,7 +73,7 @@ export class AuthService {
   public createPlaylist() {
     return new Promise((resolve, reject) => {
       const userId = localStorage.getItem('userId');
-      this.http.post(`${environment.apiDomain}api/user/authenticate`, { userId })
+      this.http.post(`${environment.apiDomain}api/user/create-playlist`, { userId })
         .toPromise()
         .then(response => {
           resolve(response.json());
@@ -90,7 +90,6 @@ export class AuthService {
       this.http.get(`${environment.apiDomain}api/user/playlist-id`, options)
         .toPromise()
         .then(response => {
-          console.log(response)
           resolve(response.json());
         }).catch(err => {
           reject(err);

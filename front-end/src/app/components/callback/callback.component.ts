@@ -10,19 +10,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CallbackComponent implements OnInit {
 
 	private window: any;
-  private authenticated: boolean;
   private initialized: boolean;
 
   constructor(private authService: AuthService,
               private router: Router,
               private route: ActivatedRoute) {
     this.window = window;
-    var self = this;
-    this.authService.isAuthenticated()
-      .then(result => {
-        self.authenticated = result['authenticated'];
-        self.initialized = true;
-      })
   }
 
   ngOnInit() {
@@ -31,19 +24,33 @@ export class CallbackComponent implements OnInit {
         this.authService.submitAccessCode(params.code)
         .then(res => {
           if (res['userId']) {
-            this.authenticated = true;
             this.authService.setSession(res['userId']);
-            console.log(res['playlistId'])
-            //if playlist not created, then create it
-            this.authService.getPlaylistId();
-            this.router.navigate(['/'], {queryParams: {}});
+            return this.getPlaylistId();
+          } else {
+          	return Promise.reject('There was an error');
           }
+        })
+        .then(data => {
+        	if (data['playlistId']) {
+        		console.log(data['playlistId'])
+        		//this.router.navigate(['/'], {queryParams: {}});
+        	} else {
+        		return this.createPlaylist();
+        	}
         })
         .catch(err => {
           console.log(err);
         })
       }
     })
+  }
+
+  getPlaylistId() {
+  	return this.authService.getPlaylistId();
+  }
+
+  createPlaylist() {
+  	return this.authService.createPlaylist();
   }
 
   getSpotifyAuthUrl() {
