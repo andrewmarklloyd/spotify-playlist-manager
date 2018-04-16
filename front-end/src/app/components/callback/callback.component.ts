@@ -33,14 +33,13 @@ export class CallbackComponent implements OnInit {
         .then(data => {
         	if (data['playlistId']) {
         		console.log(data['playlistId'])
-        		//this.router.navigate(['/'], {queryParams: {}});
         	} else {
         		return this.createPlaylist();
         	}
         })
         .then(result => {
-        	const playlistUrl = `https://open.spotify.com/user/andrewlloyd85/playlist/7cseUSF9JjRQVNYTuKC1Df?si=cvQhowHoRP6RTYs5OIPZiQ`;
-        	console.log(result);
+        	const playlistUrl = `https://open.spotify.com/user/${result['userId']}/playlist/${result['releaseDiscovery']}`;
+        	console.log(playlistUrl)
         })
         .catch(err => {
           console.log(err);
