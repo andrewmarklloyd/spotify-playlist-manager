@@ -38,12 +38,14 @@ export class CallbackComponent implements OnInit {
         	}
         })
         .then(result => {
-        	const playlistUrl = `https://open.spotify.com/user/${result['userId']}/playlist/${result['releaseDiscovery']}`;
-        	console.log(playlistUrl)
+          const playlistUrl = `https://open.spotify.com/user/${result['userId']}/playlist/${result['releaseDiscovery']}`;
+          console.log(result)
         })
         .catch(err => {
           console.log(err);
         })
+      } else {
+        this.router.navigate(['/'], {queryParams: {}});
       }
     })
   }

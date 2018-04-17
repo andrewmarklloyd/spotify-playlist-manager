@@ -57,24 +57,24 @@ function createPlaylist(req, res, next) {
         })
         .then(result => {
           if (result.releaseDiscovery) {
-            res.json({authenticated: true, userId: req.body.userId, releaseDiscovery: result.releaseDiscovery, initialCreation: false});
+            return Promise.resolve({userId: req.body.userId, releaseDiscovery: result.releaseDiscovery, initialCreation: false});
           } else {
-            spotifyInterface.createAggregatePlaylist(req.body.userId, tokenResult.accessToken)
+            return spotifyInterface.createAggregatePlaylist(req.body.userId, tokenResult.accessToken)
             .then(response => {
-              res.json({authenticated: true, userId: req.body.userId, releaseDiscovery: response.body.id, initialCreation: true});
-            })
-            .catch(err => {
-              const apiError = new APIError(err);
-              next(apiError);
+              return Promise.resolve({userId: req.body.userId, releaseDiscovery: response.body.id, initialCreation: true});
             })
           }
+        })
+        .then(result => {
+          res.json(result);
         })
         .catch(err => {
           const apiError = new APIError(err);
           next(apiError);
         })
       } else {
-        res.json({authenticated: false});
+        const apiError = new APIError('Unauthorized', 401);
+        next(apiError);
       }
     })
 }
@@ -82,7 +82,7 @@ function createPlaylist(req, res, next) {
 function getPlaylistId(req, res, next) {
   mysqlInterface.getUserPlaylist(req.query.userId)
     .then(result => {
-      res.json({playlistId: result})
+      res.json({playlistId: result});
     })
     .catch(err => {
       const apiError = new APIError(err);
