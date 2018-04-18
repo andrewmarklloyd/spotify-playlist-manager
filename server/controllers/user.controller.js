@@ -82,7 +82,11 @@ function createPlaylist(req, res, next) {
 function getPlaylistId(req, res, next) {
   mysqlInterface.getUserPlaylist(req.query.userId)
     .then(result => {
-      res.json({initialCreation: false, userId: result.userId, releaseDiscovery: result.playlistId});
+      if (result) {
+        res.json({initialCreation: false, userId: result.userId, releaseDiscovery: result.playlistId});
+      } else {
+        res.json({});
+      }
     })
     .catch(err => {
       const apiError = new APIError(err);
