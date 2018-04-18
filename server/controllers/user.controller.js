@@ -43,46 +43,46 @@ function authenticateUser(req, res, next) {
 }
 
 function createPlaylist(req, res, next) {
+  var token;
   mysqlInterface.getUserSpotifyTokens(req.body.userId)
     .then(tokenResult => {
-      if (tokenResult) {
-        new Promise((resolve, reject) => {
-          playlistArchiveService.getPlaylists(req.body.userId, function(err, result) {
-            if (err) {
-              reject(err)
-            } else {
-              resolve(result);
-            }
-          })  
-        })
-        .then(result => {
-          if (result.releaseDiscovery) {
-            return Promise.resolve({userId: req.body.userId, releaseDiscovery: result.releaseDiscovery, initialCreation: false});
+      token = tokenResult;
+      return new Promise((resolve, reject) => {
+        playlistArchiveService.getPlaylists(req.body.userId, function(err, result) {
+          if (err) {
+            reject(err)
           } else {
-            return spotifyInterface.createAggregatePlaylist(req.body.userId, tokenResult.accessToken)
-            .then(response => {
-              return Promise.resolve({userId: req.body.userId, releaseDiscovery: response.body.id, initialCreation: true});
-            })
+            resolve(result);
           }
-        })
-        .then(result => {
-          res.json(result);
-        })
-        .catch(err => {
-          const apiError = new APIError(err);
-          next(apiError);
-        })
+        })  
+      })
+    })
+    .then(result => {
+      if (result.releaseDiscovery) {
+        return Promise.resolve({userId: req.body.userId, releaseDiscovery: result.releaseDiscovery, initialCreation: false});
       } else {
-        const apiError = new APIError('Unauthorized', 401);
-        next(apiError);
+        return spotifyInterface.createAggregatePlaylist(req.body.userId, token.accessToken)
+        .then(response => {
+          return mysqlInterface.setReleaseDiscoveryPlaylist(req.body.userId, response.body.id)
+          .then(result => {
+            return Promise.resolve({userId: req.body.userId, releaseDiscovery: response.body.id, initialCreation: true});
+          })
+        })
       }
+    })
+    .then(result => {
+      res.json(result);
+    })
+    .catch(err => {
+      const apiError = new APIError(err);
+      next(apiError);
     })
 }
 
 function getPlaylistId(req, res, next) {
   mysqlInterface.getUserPlaylist(req.query.userId)
     .then(result => {
-      res.json({playlistId: result});
+      res.json({initialCreation: false, userId: result.userId, releaseDiscovery: result.playlistId});
     })
     .catch(err => {
       const apiError = new APIError(err);

@@ -31,15 +31,15 @@ export class CallbackComponent implements OnInit {
           }
         })
         .then(data => {
-        	if (data['playlistId']) {
-        		console.log(data['playlistId'])
+        	if (data['releaseDiscovery']) {
+        		return Promise.resolve(data);
         	} else {
         		return this.createPlaylist();
         	}
         })
         .then(result => {
-          const playlistUrl = `https://open.spotify.com/user/${result['userId']}/playlist/${result['releaseDiscovery']}`;
           console.log(result)
+          const playlistUrl = `https://open.spotify.com/user/${result['userId']}/playlist/${result['releaseDiscovery']}`;
         })
         .catch(err => {
           console.log(err);
