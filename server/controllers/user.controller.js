@@ -12,6 +12,10 @@ const spotifyInterface = new SpotifyInterface();
 
 const playlistArchiveService = new PlaylistArchiveService();
 
+function me(req, res, next) {
+  res.json({user: req.user});
+}
+
 function getAuthUrl(req, res, next) {;
   const authUrl = spotifyInterface.getAuthUrl(req.query.authType);
   res.json({authUrl})
@@ -95,4 +99,4 @@ function getPlaylistId(req, res, next) {
 }
 
 
-export default { getAuthUrl, exchangeCode, authenticateUser, createPlaylist, getPlaylistId };
+export default { me, getAuthUrl, exchangeCode, authenticateUser, createPlaylist, getPlaylistId };

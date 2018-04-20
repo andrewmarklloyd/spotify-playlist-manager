@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions } from '@angular/http';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import { environment } from '../../environments/environment';
@@ -23,6 +23,20 @@ export class AuthService {
           alert(err)
         })
 		})
+  }
+
+  public getMe() {
+    return new Promise((resolve, reject) => {
+      const headers = new Headers({ 'Authorization': 'Bearer ' + localStorage.getItem('token') });
+      const options = new RequestOptions({ headers: headers });
+      this.http.get(`${environment.apiDomain}api/user/me`, options)
+        .toPromise()
+        .then(res => {
+          resolve(res.json())
+        }).catch(err => {
+          reject(err)
+        })
+    })
   }
 
   public register(spotifyAuthCode, email) {

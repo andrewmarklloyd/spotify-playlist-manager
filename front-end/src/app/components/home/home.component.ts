@@ -9,36 +9,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  private window: any;
-  private authenticated: boolean;
-  private initialized: boolean;
-
   constructor(private authService: AuthService,
               private router: Router,
               private route: ActivatedRoute) {
-    this.window = window;
+    
     var self = this;
-    this.authService.isAuthenticated()
+    this.authService.getMe()
       .then(result => {
-        self.authenticated = result['authenticated'];
-        self.initialized = true;
+        console.log(result)
       })
   }
 
   ngOnInit() {
     
   }
-
-  getSpotifyAuthUrl() {
-  	this.authService.getSpotifyAuthUrl()
-  		.then(authUrl => {
-        this.window.location.href = authUrl;
-  		})
-  }
-
-  logout() {
-    this.authService.logout();
-    this.authenticated = false;
-  }
-
 }
