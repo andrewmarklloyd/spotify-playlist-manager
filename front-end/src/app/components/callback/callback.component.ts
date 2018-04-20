@@ -52,8 +52,8 @@ export class CallbackComponent implements OnInit {
       if (params.code) {
         this.getStateFunction(params.code, params.state)
         .then(res => {
-          console.log(res)
           localStorage.setItem('token', res['token']);
+          this.router.navigate(['/'], {queryParams: {}});
         })
         .catch(err => {
           console.log(err)

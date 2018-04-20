@@ -6,15 +6,19 @@
         routerLink="/">
           Home
       </button>
-      <button
+      <button *ngIf="!isLoggedIn"
         class="btn btn-primary btn-margin"
         routerLink="/register">
           Register
       </button>
-      <button
+      <button *ngIf="!isLoggedIn"
         class="btn btn-primary btn-margin"
         routerLink="/login">
           Login
+      </button>
+      <button *ngIf="isLoggedIn" (click)=logout()
+        class="btn btn-primary btn-margin">
+          Logout
       </button>
 
     </div>

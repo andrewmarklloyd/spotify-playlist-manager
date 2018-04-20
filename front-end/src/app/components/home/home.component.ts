@@ -13,11 +13,6 @@ export class HomeComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute) {
     
-    var self = this;
-    this.authService.getMe()
-      .then(result => {
-        console.log(result)
-      })
   }
 
   ngOnInit() {

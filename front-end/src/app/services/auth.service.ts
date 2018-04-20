@@ -75,9 +75,8 @@ export class AuthService {
   }
 
   public logout(): void {
-    localStorage.removeItem('userId');
-    this.router.navigate(['/']);
-    this.router.navigate(['/'], {queryParams: {}});
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('token');
   }
 
   public isAuthenticated() {
