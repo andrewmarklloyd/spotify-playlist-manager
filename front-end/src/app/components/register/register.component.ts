@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit {
   register() {
   	this.loading = true;
   	localStorage.setItem('email', this.model.email);
-  	this.authService.getSpotifyAuthUrl()
+  	this.authService.getSpotifyAuthUrl('register')
   		.then(authUrl => {
         this.window.location.href = authUrl;
   		})

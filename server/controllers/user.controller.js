@@ -12,9 +12,9 @@ const spotifyInterface = new SpotifyInterface();
 
 const playlistArchiveService = new PlaylistArchiveService();
 
-function getAuthUrl(req, res, next) {
-  const authUrl = spotifyInterface.getAuthUrl();
-  res.json({authUrl: authUrl})
+function getAuthUrl(req, res, next) {;
+  const authUrl = spotifyInterface.getAuthUrl(req.query.authType);
+  res.json({authUrl})
 }
 
 function exchangeCode(req, res, next) {

@@ -11,9 +11,10 @@ export class AuthService {
   						public router: Router) {
   }
 
-  public getSpotifyAuthUrl() {
+  public getSpotifyAuthUrl(authType) {
 		return new Promise((resolve, reject) => {
-			this.http.get(`${environment.apiDomain}api/user/auth-url`)
+      const options = new RequestOptions({ params: { authType } })
+			this.http.get(`${environment.apiDomain}api/user/auth-url`, options)
 				.toPromise()
 				.then(res => {
 					resolve(res.json().authUrl)
@@ -34,6 +35,18 @@ export class AuthService {
           reject(err)
         })
 		})
+  }
+
+  public login(spotifyAuthCode, email) {
+    return new Promise((resolve, reject) => {
+      this.http.post(`${environment.apiDomain}api/auth/login`, {spotifyAuthCode, email})
+        .toPromise()
+        .then(res => {
+          resolve(res.json())
+        }).catch(err => {
+          reject(err)
+        })
+    })
   }
 
   public setSession(userId): void {  

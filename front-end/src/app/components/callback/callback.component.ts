@@ -50,7 +50,7 @@ export class CallbackComponent implements OnInit {
     })*/
     this.route.queryParams.subscribe(params => {
       if (params.code) {
-        this.authService.register(params.code, localStorage.getItem('email'))
+        this.getStateFunction(params.code, params.state)
         .then(res => {
           console.log(res)
         })
@@ -63,19 +63,22 @@ export class CallbackComponent implements OnInit {
     })
   }
 
+  getStateFunction(code, state) {
+    if (state == 'register') {
+      return this.authService.register(code, localStorage.getItem('email'))
+    } else if (state == 'login') {
+      return this.authService.login(code, localStorage.getItem('email'))
+    } else {
+      throw new Error('Wrong state');
+    }
+  }
+
   getPlaylistId() {
   	return this.authService.getPlaylistId();
   }
 
   createPlaylist() {
   	return this.authService.createPlaylist();
-  }
-
-  getSpotifyAuthUrl() {
-  	this.authService.getSpotifyAuthUrl()
-  		.then(authUrl => {
-        this.window.location.href = authUrl;
-  		})
   }
 
   logout() {

@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   login() {
   	this.loading = true;
   	localStorage.setItem('email', this.model.email);
-  	this.authService.getSpotifyAuthUrl()
+  	this.authService.getSpotifyAuthUrl('login')
   		.then(authUrl => {
         this.window.location.href = authUrl;
   		})

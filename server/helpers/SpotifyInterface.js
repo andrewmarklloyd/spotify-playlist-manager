@@ -16,8 +16,19 @@ class SpotifyInterface {
     })
   }
 
-  getAuthUrl() {
-    const state = uuid();
+  getAuthUrl(authType) {
+    var state;
+    switch (authType) {
+      case 'login':
+        state = 'login';
+        break;
+      case 'register':
+        state = 'register';
+        break;
+      default:
+        state = uuid();
+        break;
+    }
     return spotifyApi.createAuthorizeURL(scopes, state);
   }
 
