@@ -91,13 +91,6 @@ function register(req, res, next) {
       const apiError = new APIError(err);
       next(apiError);
     })
-
-  /*const user = {userId: 'andrewlloyd85'}
-  const token = jwt.sign(user, config.jwtSecret, { expiresIn: '40000h' });
-  res.status(201).json({
-    user,
-    token
-  });*/
 }
 
 export default {
