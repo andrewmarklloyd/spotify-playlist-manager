@@ -24,9 +24,9 @@ export class AuthService {
 		})
   }
 
-  public submitAccessCode(spotifyAccessCode) {
+  public register(spotifyAuthCode, email) {
 		return new Promise((resolve, reject) => {
-			this.http.post(`${environment.apiDomain}api/user/code`, {spotifyAccessCode})
+			this.http.post(`${environment.apiDomain}api/auth/register`, {spotifyAuthCode, email})
 				.toPromise()
 				.then(res => {
 					resolve(res.json())

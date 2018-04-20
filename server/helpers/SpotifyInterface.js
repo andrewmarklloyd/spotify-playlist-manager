@@ -47,10 +47,10 @@ class SpotifyInterface {
     })
   }
 
-  getPlaylistIdsRecursive(accessToken, callback, result, options) {
+  getPlaylistIds(accessToken, callback, result, options) {
     var options = options ? options : {limit: 50, offset: 0}
     var result = result ? result : {}
-    this.getPlaylistIds(accessToken, options, result).then(result => {
+    this._privateGetPlaylistIds(accessToken, options, result).then(result => {
       if (result.next && !result.releaseRadar && !result.spotifydiscover) {
         options.offset += 10;
         this.getPlaylistIdsRecursive(accessToken, callback, result, options)
@@ -62,7 +62,7 @@ class SpotifyInterface {
     })
   }
 
-  getPlaylistIds(accessToken, options, result) {
+  _privateGetPlaylistIds(accessToken, options, result) {
     return new Promise((resolve, reject) => {
       spotifyApi.setAccessToken(accessToken);
       spotifyApi.getUserPlaylists(0, options)

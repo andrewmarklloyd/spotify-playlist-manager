@@ -12,29 +12,24 @@ const connection = mysql.createConnection({
 
 class MySQLInterface {
   constructor() {
-    connection.query('CREATE TABLE IF NOT EXISTS usertokens (userId VARCHAR(100) NOT NULL, email TEXT NOT NULL, accessToken TEXT NOT NULL, refreshToken TEXT NOT NULL, PRIMARY KEY (userId))', function (error, results, fields) {
+    connection.query('CREATE TABLE IF NOT EXISTS usertokens (email VARCHAR(200) NOT NULL, userId VARCHAR(100) NOT NULL, accessToken TEXT NOT NULL, refreshToken TEXT NOT NULL, PRIMARY KEY (email))', function (error, results, fields) {
         if (error) console.log(error);
     });
-    var self = this;
-    connection.query('CREATE TABLE IF NOT EXISTS userplaylist (userId VARCHAR(100) NOT NULL, playlistId TEXT NOT NULL, PRIMARY KEY (userId))', function (error, results, fields) {
-        if (error) console.log(error);
-    });
-    // create a separate table for userId and playlistId
   }
 
-  setUserSpotifyTokens(userId, accessToken, refreshToken) {
+  setUserSpotifyTokens(email, userId, accessToken, refreshToken) {
     return new Promise((resolve, reject) => {
-      const userInfo = {userId: userId, accessToken: encrypt(accessToken), refreshToken: encrypt(refreshToken) };
+      const userInfo = {email: email, userId: userId, accessToken: encrypt(accessToken), refreshToken: encrypt(refreshToken) };
       connection.query('REPLACE INTO usertokens SET ?', userInfo, function (error, results, fields) {
         if (error) reject(error);
-        resolve(userId);
+        resolve({userId, accessToken});
       });
     })
   }
 
-  getUserSpotifyTokens(userId) {
+  getUserSpotifyTokens(email) {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM usertokens WHERE userId = ?', [userId], function (error, results, fields) {
+      connection.query('SELECT * FROM usertokens WHERE email = ?', [email], function (error, results, fields) {
         if (error) reject(error);
         if (results[0]) {
           const tokenInfo = {};

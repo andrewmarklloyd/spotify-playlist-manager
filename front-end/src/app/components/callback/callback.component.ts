@@ -19,9 +19,9 @@ export class CallbackComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    /*this.route.queryParams.subscribe(params => {
       if (params.code) {
-        this.authService.submitAccessCode(params.code)
+        this.authService.register(params.code, localStorage.getItem('email'))
         .then(res => {
           if (res['userId']) {
             this.authService.setSession(res['userId']);
@@ -43,6 +43,19 @@ export class CallbackComponent implements OnInit {
         })
         .catch(err => {
           console.log(err);
+        })
+      } else {
+        this.router.navigate(['/'], {queryParams: {}});
+      }
+    })*/
+    this.route.queryParams.subscribe(params => {
+      if (params.code) {
+        this.authService.register(params.code, localStorage.getItem('email'))
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
         })
       } else {
         this.router.navigate(['/'], {queryParams: {}});
