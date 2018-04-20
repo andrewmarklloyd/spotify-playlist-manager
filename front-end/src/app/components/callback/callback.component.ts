@@ -54,6 +54,7 @@ export class CallbackComponent implements OnInit {
         .then(res => {
           localStorage.setItem('token', res['token']);
           this.router.navigate(['/'], {queryParams: {}});
+          this.window.location.href = '/';
         })
         .catch(err => {
           console.log(err)
