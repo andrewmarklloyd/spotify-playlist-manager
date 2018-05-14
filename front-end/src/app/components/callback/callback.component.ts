@@ -50,8 +50,4 @@ export class CallbackComponent implements OnInit {
   createPlaylist() {
   	return this.authService.createPlaylist();
   }
-
-  logout() {
-    this.authService.logout();
-  }
 }
