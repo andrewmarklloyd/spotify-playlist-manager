@@ -16,11 +16,6 @@ function me(req, res, next) {
   res.json({user: req.user});
 }
 
-function getAuthUrl(req, res, next) {;
-  const authUrl = spotifyInterface.getAuthUrl(req.query.authType);
-  res.json({authUrl})
-}
-
 function exchangeCode(req, res, next) {
   spotifyInterface.exchangeAccessCodeForTokens(req.body.spotifyAccessCode)
     .then(function(response) {
@@ -99,4 +94,4 @@ function getPlaylistId(req, res, next) {
 }
 
 
-export default { me, getAuthUrl, exchangeCode, authenticateUser, createPlaylist, getPlaylistId };
+export default { me, exchangeCode, authenticateUser, createPlaylist, getPlaylistId };

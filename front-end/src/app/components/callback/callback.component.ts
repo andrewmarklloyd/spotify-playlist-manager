@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { StorageService } from '../../services/storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -10,49 +11,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CallbackComponent implements OnInit {
 
 	private window: any;
-  private initialized: boolean;
 
   constructor(private authService: AuthService,
+              private storageService: StorageService,
               private router: Router,
               private route: ActivatedRoute) {
     this.window = window;
   }
 
   ngOnInit() {
-    /*this.route.queryParams.subscribe(params => {
-      if (params.code) {
-        this.authService.register(params.code, localStorage.getItem('email'))
-        .then(res => {
-          if (res['userId']) {
-            this.authService.setSession(res['userId']);
-            return this.getPlaylistId();
-          } else {
-          	return Promise.reject('There was an error');
-          }
-        })
-        .then(data => {
-        	if (data['releaseDiscovery']) {
-        		return Promise.resolve(data);
-        	} else {
-        		return this.createPlaylist();
-        	}
-        })
-        .then(result => {
-          console.log(result)
-          const playlistUrl = `https://open.spotify.com/user/${result['userId']}/playlist/${result['releaseDiscovery']}`;
-        })
-        .catch(err => {
-          console.log(err);
-        })
-      } else {
-        this.router.navigate(['/'], {queryParams: {}});
-      }
-    })*/
     this.route.queryParams.subscribe(params => {
       if (params.code) {
-        this.getStateFunction(params.code, params.state)
+        this.registerOrLogin(params.code, params.state)
         .then(res => {
-          localStorage.setItem('token', res['token']);
+          this.storageService.setItem('token', res['token']);
           this.router.navigate(['/'], {queryParams: {}});
           this.window.location.href = '/';
         })
@@ -65,18 +37,14 @@ export class CallbackComponent implements OnInit {
     })
   }
 
-  getStateFunction(code, state) {
+  registerOrLogin(code, state) {
     if (state == 'register') {
-      return this.authService.register(code, localStorage.getItem('email'))
+      return this.authService.register(code, this.storageService.getItem('email'))
     } else if (state == 'login') {
-      return this.authService.login(code, localStorage.getItem('email'))
+      return this.authService.login(code, this.storageService.getItem('email'))
     } else {
       throw new Error('Wrong state');
     }
-  }
-
-  getPlaylistId() {
-  	return this.authService.getPlaylistId();
   }
 
   createPlaylist() {
@@ -86,5 +54,4 @@ export class CallbackComponent implements OnInit {
   logout() {
     this.authService.logout();
   }
-
 }
