@@ -3,18 +3,20 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import { environment } from '../../environments/environment';
+import { StorageService } from './storage.service';
 
 @Injectable()
 export class AuthService {
 
   constructor(private http: Http,
-  						public router: Router) {
+  						public router: Router,
+              private storageService: StorageService) {
   }
 
   public getSpotifyAuthUrl(authType) {
 		return new Promise((resolve, reject) => {
       const options = new RequestOptions({ params: { authType } })
-			this.http.get(`${environment.apiDomain}api/user/auth-url`, options)
+			this.http.get(`${environment.apiDomain}api/auth/auth-url`, options)
 				.toPromise()
 				.then(res => {
 					resolve(res.json().authUrl)
@@ -25,9 +27,18 @@ export class AuthService {
 		})
   }
 
+  public getToken() {
+    const token = this.storageService.getItem('token');
+    return token;
+  }
+
+  public isLoggedIn() {
+    return this.getToken() != null;
+  }
+
   public getMe() {
     return new Promise((resolve, reject) => {
-      const headers = new Headers({ 'Authorization': 'Bearer ' + localStorage.getItem('token') });
+      const headers = new Headers({ 'Authorization': 'Bearer ' + this.storageService.getItem('token') });
       const options = new RequestOptions({ headers: headers });
       this.http.get(`${environment.apiDomain}api/user/me`, options)
         .toPromise()
@@ -63,42 +74,13 @@ export class AuthService {
     })
   }
 
-  public setSession(userId): void {  
-    localStorage.setItem('userId', userId);
-  }
-
-  private getSession(): void {
-    const userSession = {
-      access_token: localStorage.getItem('access_token'),
-      id_token: localStorage.getItem('id_token')
-    };
-  }
-
   public logout(): void {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('token');
-  }
-
-  public isAuthenticated() {
-    return new Promise((resolve, reject) => {
-      const userId = localStorage.getItem('userId');
-      if (userId) {
-        this.http.post(`${environment.apiDomain}api/user/authenticate`, { userId })
-          .toPromise()
-          .then(response => {
-            resolve(response.json());
-          }).catch(err => {
-            reject(err);
-          })
-      } else {
-        resolve(false);
-      }
-    });
+    this.storageService.removeItem('token');
   }
 
   public createPlaylist() {
     return new Promise((resolve, reject) => {
-      const userId = localStorage.getItem('userId');
+      const userId = this.storageService.getItem('userId');
       this.http.post(`${environment.apiDomain}api/user/create-playlist`, { userId })
         .toPromise()
         .then(response => {
@@ -108,20 +90,4 @@ export class AuthService {
         })
     });
   }
-
-  public getPlaylistId() {
-    return new Promise((resolve, reject) => {
-      const userId = localStorage.getItem('userId');
-      const options = new RequestOptions({ params: { userId } })
-      this.http.get(`${environment.apiDomain}api/user/playlist-id`, options)
-        .toPromise()
-        .then(response => {
-          resolve(response.json());
-        }).catch(err => {
-          reject(err);
-        })
-    });
-  }
 }
-
-

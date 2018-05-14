@@ -15,6 +15,10 @@ const spotifyInterface = new SpotifyInterface();
 
 const playlistArchiveService = new PlaylistArchiveService();
 
+function getAuthUrl(req, res, next) {;
+  const authUrl = spotifyInterface.getAuthUrl(req.query.authType);
+  res.json({authUrl})
+}
 
 function login(req, res, next) {
   const { email } = req.body;
@@ -24,7 +28,7 @@ function login(req, res, next) {
   var accessToken;
   var refreshToken;
 
-  mysqlInterface.getUserSpotifyTokens(email)
+  mysqlInterface.getUserInfo(email)
     .then(userInfo => {
       if (!userInfo) {
         throw new Error('User not found');
@@ -57,9 +61,7 @@ function login(req, res, next) {
       const token = jwt.sign(user, config.jwtSecret, { expiresIn: '40000h' });
 
       return res.status(200).json({
-        token,
-        user,
-        playlistId: userPlaylistInfo.playlistId
+        token
       });
     })
     .catch(err => {
@@ -76,9 +78,9 @@ function register(req, res, next) {
   var accessToken;
   var refreshToken;
 
-  mysqlInterface.getUserSpotifyTokens(email)
-    .then(userInfo => {
-      if (userInfo && userInfo.email == email) {
+  mysqlInterface.userExists(email)
+    .then(userExists => {
+      if (userExists) {
         throw new Error('User already registered');
       } else {
         return spotifyInterface.exchangeAccessCodeForTokens(spotifyAuthCode);
@@ -122,9 +124,7 @@ function register(req, res, next) {
       const user = { email, userId };
       const token = jwt.sign(user, config.jwtSecret, { expiresIn: '40000h' });
       return res.status(200).json({
-        token,
-        user,
-        playlistId
+        token
       });
     })
     .catch(err => {
@@ -134,6 +134,7 @@ function register(req, res, next) {
 }
 
 export default {
+  getAuthUrl,
   login,
   register
 };

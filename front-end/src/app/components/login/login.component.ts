@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,8 @@ export class LoginComponent implements OnInit {
 	loading: boolean = false;
 	private window: any;
   
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService,
+              private storageService: StorageService) {
   	this.window = window;
   }
 
@@ -21,7 +23,7 @@ export class LoginComponent implements OnInit {
 
   login() {
   	this.loading = true;
-  	localStorage.setItem('email', this.model.email);
+  	this.storageService.setItem('email', this.model.email);
   	this.authService.getSpotifyAuthUrl('login')
   		.then(authUrl => {
         this.window.location.href = authUrl;

@@ -64,7 +64,7 @@ class SpotifyInterface {
     this._privateGetPlaylistIds(accessToken, options, result).then(result => {
       if (result.next && !result.releaseRadar && !result.spotifydiscover) {
         options.offset += 10;
-        this.getPlaylistIdsRecursive(accessToken, callback, result, options)
+        this.getPlaylistIds(accessToken, callback, result, options)
       } else {
         callback(null, result)
       }

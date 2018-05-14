@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router'
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -10,9 +11,10 @@ export class AppComponent {
 	isLoggedIn: boolean;
 	window: any;
 
-  constructor(private authService: AuthService) {
-    this.isLoggedIn = Boolean(localStorage.getItem('isLoggedIn'));
+  constructor(private authService: AuthService,
+              private router: Router) {
     this.window = window;
+    this.isLoggedIn = this.authService.isLoggedIn();
   }
 
   logout() {
