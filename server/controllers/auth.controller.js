@@ -107,7 +107,7 @@ function register(req, res, next) {
       if (playlistIds.releaseDiscovery) {
         return Promise.resolve(playlistIds.releaseDiscovery);
       } else {
-        spotifyInterface.createAggregatePlaylist(userId, accessToken)
+        return spotifyInterface.createAggregatePlaylist(userId, accessToken)
         .then(playlistResult => {
           console.log('playlistResult', playlistResult)
           return Promise.resolve(playlistResult.body.id);
