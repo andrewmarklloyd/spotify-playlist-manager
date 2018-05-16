@@ -8,12 +8,9 @@ import paramValidation from '../../config/param-validation';
 import config from '../../config/config';
 import MySQLInterface from '../helpers/MySQLInterface';
 import SpotifyInterface from '../helpers/SpotifyInterface';
-import PlaylistArchiveService from '../helpers/PlaylistArchiveService';
 
 const mysqlInterface = new MySQLInterface();
 const spotifyInterface = new SpotifyInterface();
-
-const playlistArchiveService = new PlaylistArchiveService();
 
 function getAuthUrl(req, res, next) {;
   const authUrl = spotifyInterface.getAuthUrl(req.query.authType);
@@ -107,7 +104,7 @@ function register(req, res, next) {
       if (playlistIds.releaseDiscovery) {
         return Promise.resolve(playlistIds.releaseDiscovery);
       } else {
-        spotifyInterface.createAggregatePlaylist(userId, accessToken)
+        return spotifyInterface.createAggregatePlaylist(userId, accessToken)
         .then(playlistResult => {
           console.log('playlistResult', playlistResult)
           return Promise.resolve(playlistResult.body.id);
@@ -121,7 +118,7 @@ function register(req, res, next) {
         })
     })
     .then(playlistId => {
-      const user = { email, userId };
+      const user = { email };
       const token = jwt.sign(user, config.jwtSecret, { expiresIn: '40000h' });
       return res.status(200).json({
         token

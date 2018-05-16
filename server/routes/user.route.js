@@ -6,15 +6,8 @@ import controller from '../controllers/user.controller';
 
 const router = express.Router();
 
-router.route('/code')
-  .post(controller.exchangeCode);
+router.use(expressJwt({ secret: config.jwtSecret }));
 
-router.route('/me').get(expressJwt({ secret: config.jwtSecret }), controller.me);
-
-router.route('/playlist-id')
-  .get(controller.getPlaylistId);
-
-router.route('/create-playlist')
-  .post(controller.createPlaylist);
+router.route('/me').get(controller.me);
 
 export default router;

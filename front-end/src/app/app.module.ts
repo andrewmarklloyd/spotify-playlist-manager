@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 
 // Services
 import { AuthService } from './services/auth.service';
+import { PlaylistService } from './services/playlist.service';
 import { StorageService } from './services/storage.service';
 import { HomeComponent } from './components/home/home.component';
 import { CallbackComponent } from './components/callback/callback.component';
@@ -31,7 +32,8 @@ import { RegisterComponent } from './components/register/register.component';
   ],
   providers: [
   	AuthService,
-    StorageService
+    StorageService,
+    PlaylistService
   ],
   bootstrap: [AppComponent]
 })
