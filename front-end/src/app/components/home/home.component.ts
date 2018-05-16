@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { PlaylistService } from '../../services/playlist.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -10,12 +11,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class HomeComponent implements OnInit {
 
   constructor(private authService: AuthService,
-              private router: Router,
-              private route: ActivatedRoute) {
+  						private playlistService: PlaylistService) {
     
   }
 
   ngOnInit() {
-    
+  	
   }
 }

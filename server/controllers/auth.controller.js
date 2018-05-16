@@ -118,7 +118,7 @@ function register(req, res, next) {
         })
     })
     .then(playlistId => {
-      const user = { email, userId };
+      const user = { email };
       const token = jwt.sign(user, config.jwtSecret, { expiresIn: '40000h' });
       return res.status(200).json({
         token

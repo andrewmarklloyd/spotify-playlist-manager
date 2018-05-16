@@ -6,6 +6,8 @@ import controller from '../controllers/user.controller';
 
 const router = express.Router();
 
-router.route('/me').get(expressJwt({ secret: config.jwtSecret }), controller.me);
+router.use(expressJwt({ secret: config.jwtSecret }));
+
+router.route('/me').get(controller.me);
 
 export default router;
