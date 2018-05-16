@@ -8,12 +8,9 @@ import paramValidation from '../../config/param-validation';
 import config from '../../config/config';
 import MySQLInterface from '../helpers/MySQLInterface';
 import SpotifyInterface from '../helpers/SpotifyInterface';
-import PlaylistArchiveService from '../helpers/PlaylistArchiveService';
 
 const mysqlInterface = new MySQLInterface();
 const spotifyInterface = new SpotifyInterface();
-
-const playlistArchiveService = new PlaylistArchiveService();
 
 function getAuthUrl(req, res, next) {;
   const authUrl = spotifyInterface.getAuthUrl(req.query.authType);
