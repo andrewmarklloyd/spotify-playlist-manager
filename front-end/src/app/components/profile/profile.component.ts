@@ -8,12 +8,14 @@ import { UserService } from '../../services/user.service';
 })
 export class ProfileComponent implements OnInit {
 
+  user: Object = {};
+
   constructor(private userService: UserService) { }
 
   ngOnInit() {
   	this.userService.getMe()
   		.then(res => {
-  			console.log(res)
+        this.user = res.user;
   		})
   }
 }
