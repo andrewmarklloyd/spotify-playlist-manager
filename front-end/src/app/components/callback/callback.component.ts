@@ -46,8 +46,4 @@ export class CallbackComponent implements OnInit {
       throw new Error('Wrong state');
     }
   }
-
-  createPlaylist() {
-  	return this.authService.createPlaylist();
-  }
 }

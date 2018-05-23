@@ -8,6 +8,7 @@ import { FormsModule }   from '@angular/forms';
 import { AppComponent } from './app.component';
 
 // Services
+import { UserService } from './services/user.service';
 import { AuthService } from './services/auth.service';
 import { PlaylistService } from './services/playlist.service';
 import { StorageService } from './services/storage.service';
@@ -35,7 +36,8 @@ import { ProfileComponent } from './components/profile/profile.component';
   providers: [
   	AuthService,
     StorageService,
-    PlaylistService
+    PlaylistService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

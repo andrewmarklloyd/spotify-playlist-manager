@@ -54,7 +54,8 @@ function login(req, res, next) {
       })
     })
     .then(userPlaylistInfo => {
-      const user = { email, userId: userPlaylistInfo.userInfo.userId };
+      //const user = { email, userId: userPlaylistInfo.userInfo.userId };
+      const user = { email };
       const token = jwt.sign(user, config.jwtSecret, { expiresIn: '40000h' });
 
       return res.status(200).json({

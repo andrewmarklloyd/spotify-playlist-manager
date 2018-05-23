@@ -60,17 +60,4 @@ export class AuthService {
   public logout(): void {
     this.storageService.removeItem('token');
   }
-
-  public createPlaylist() {
-    return new Promise((resolve, reject) => {
-      const userId = this.storageService.getItem('userId');
-      this.http.post(`${environment.apiDomain}api/user/create-playlist`, { userId })
-        .toPromise()
-        .then(response => {
-          resolve(response.json());
-        }).catch(err => {
-          reject(err);
-        })
-    });
-  }
 }
