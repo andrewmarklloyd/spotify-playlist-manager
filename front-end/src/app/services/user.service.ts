@@ -23,4 +23,18 @@ export class UserService {
     })
   }
 
+  public getProfile() {
+    return new Promise((resolve, reject) => {
+      const headers = new Headers({ 'Authorization': 'Bearer ' + this.storageService.getItem('token') });
+      const options = new RequestOptions({ headers: headers });
+      this.http.get(`${environment.apiDomain}api/user/profile`, options)
+        .toPromise()
+        .then(res => {
+          resolve(res.json())
+        }).catch(err => {
+          reject(err)
+        })
+    })
+  }
+
 }

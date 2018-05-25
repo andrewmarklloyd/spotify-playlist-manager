@@ -10,4 +10,6 @@ router.use(expressJwt({ secret: config.jwtSecret }));
 
 router.route('/me').get(controller.me);
 
+router.route('/profile').get(controller.profile);
+
 export default router;

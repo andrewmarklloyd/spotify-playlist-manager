@@ -16,6 +16,11 @@ function me(req, res, next) {
   res.json({user: req.user});
 }
 
+function profile(req, res, next) {
+  res.json({hello: 'world'});
+}
+
 export default {
-  me
+  me,
+  profile
 };
