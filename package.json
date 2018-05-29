@@ -90,7 +90,6 @@
     ]
   },
   "devDependencies": {
-    "@angular/cli": "1.6.7",
     "codelyzer": "^4.0.1",
     "concurrently": "^3.5.1",
     "jasmine-core": "~2.8.0",
