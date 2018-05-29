@@ -1,26 +1,21 @@
 # take default image of node boron i.e  node 6.x
-FROM node:6.10.1
+FROM node:8.10.0
 
 MAINTAINER Andrew Lloyd <andrew85.lloyd@gmail.com>
 
-# create app directory in container
 RUN mkdir -p /app
 
-# set /app directory as default working directory
 WORKDIR /app
 
-# only copy package.json initially so that `RUN yarn` layer is recreated only
-# if there are changes in package.json
-ADD package.json yarn.lock /app/
+#ADD package.json /app/
 
-# --pure-lockfile: Don’t generate a yarn.lock lockfile
-RUN yarn --pure-lockfile
+COPY ./dist /app/dist/
 
-# copy all file from current dir to /app in container
-COPY . /app/
+COPY ./static /app/static/
 
-# expose port 4040
+COPY ./node_modules /app/node_modules/
+
 EXPOSE 3000
 
 # cmd to start service
-CMD [ "yarn", "start" ]
+CMD [ "node", "dist/index.js" ]

@@ -1,30 +1,24 @@
 version: '2'
 services:
-  event-gateway:
-    build:
-      context: .
-    container_name: event-gateway
-    volumes:
-      # Mounts the project directory on the host to /app inside the container,
-      # allowing you to modify the code without having to rebuild the image.
-      - .:/app
-      # Just specify a path and let the Engine create a volume.
-      # Data present in the base image at the specified mount point will be copied
-      # over to the new volume upon volume initialization.
-      # node_modules from this new volume will be used and not from your local dev env.
-      - /app/node_modules/
-
-    # Expose ports [HOST:CONTAINER]
+  spotify-app:
+    image: andrewlloyd/spotify-playlist-app
+    container_name: spotify-app
+    restart: always
     ports:
-      - "3000:3000"
-
-    # Set environment variables from this file
+      - "80:3000"
     env_file:
       - .env
+    environment:
+      - TEST=${TEST}
+    depends_on:
+      - db
   db:
     image: mysql:5.5
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: spotifyapi
+      MYSQL_USER: spotifyapi
+      MYSQL_PASSWORD: password
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
     ports:
-    - "3306:3306"
+    - "3307:3306"
