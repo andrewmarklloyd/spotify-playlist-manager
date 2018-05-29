@@ -46,10 +46,12 @@ if (config.env === 'development') {
   }));
 }
 
-const staticDir = '/static';
-app.use(express.static(path.join(__dirname, '/../static')));
-
+const staticDir = path.join(__dirname, '/../static');
+app.use(express.static(staticDir));
 app.use('/api', routes);
+app.get('*', (req, res) => {
+    res.sendFile(`${staticDir}/index.html`);
+});
 
 // if error is not an instanceOf APIError, convert it.
 app.use((err, req, res, next) => {
