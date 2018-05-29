@@ -4,6 +4,7 @@ node_js:
 before_script:
  - cd front-end
  - npm install
+ - cd ../
  
 script:
   - ./build-ci.sh
