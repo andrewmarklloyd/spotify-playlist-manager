@@ -2,7 +2,8 @@ language: node_js
 node_js:
   - "8.10.0"
 before_script:
- - echo before
+ - cd front-end
+ - npm install
  
 script:
   - ./build-ci.sh
