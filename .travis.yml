@@ -7,10 +7,19 @@ services:
 cache:
   directories:
   - node_modules
+addons:
+  sshknownhosts:
+  - andrewmarklloyd.com
+branches:
+  only:
+    - master
 before_script:
- - cd front-end
- - npm install
- - cd ../
+  - ls -al ~/.ssh
+ #- cd front-end
+ #- npm install
+ #- cd ../
+
  
 script:
-  - ./build-ci.sh
+  - ls -l
+  #- ./build-ci.sh
