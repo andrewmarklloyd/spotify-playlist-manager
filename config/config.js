@@ -28,12 +28,8 @@ const envVarsSchema = Joi.object({
     .description('Spotify client Id required'),
   SPOTIFY_CLIENT_SECRET: Joi.string().required()
     .description('Spotify client secret required'),
-  SPOTIFY_REDIRECT_URI: Joi.string()
-    .when('NODE_ENV', {
-      is: Joi.string().equal('development'),
-      then: Joi.string().default('http://localhost:4200/callback'),
-      otherwise: Joi.string().default('http://localhost:3000/callback')
-    }),
+  SPOTIFY_REDIRECT_URI: Joi.string().required()
+    .description('Spotify redirect URI required')
 }).unknown()
   .required();
 
