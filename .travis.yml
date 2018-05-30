@@ -25,6 +25,6 @@ before_deploy:
 deploy:
   provider: script
   skip_cleanup: true
-  script: scp deploy-ci.sh deploy@andrewmarklloyd.com:/tmp
+  script: ssh deploy@andrewmarklloyd.com "bash -s" < ./deploy-ci.sh #scp deploy-ci.sh deploy@andrewmarklloyd.com:/tmp
   on:
     branch: master
