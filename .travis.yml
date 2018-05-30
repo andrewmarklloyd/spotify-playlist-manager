@@ -13,6 +13,9 @@ addons:
 branches:
   only:
   - master
+before_script:
+- cd front-end
+- npm install
 script:
 - ./build-ci.sh
 before_deploy:
