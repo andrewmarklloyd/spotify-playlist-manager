@@ -14,8 +14,6 @@ addons:
 branches:
   only:
   - master
-before_script:
-- chmod 600 deploy_rsa && mv deploy_rsa ~/.ssh/id_rsa
 script:
 - ls -l
 before_deploy:
