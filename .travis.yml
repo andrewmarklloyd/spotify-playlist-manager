@@ -9,7 +9,7 @@ cache:
   directories:
   - node_modules
 addons:
-  sshknownhosts:
+  ssh_known_hosts:
   - andrewmarklloyd.com
 branches:
   only:
